@@ -1,7 +1,7 @@
 function Homepage() {
   return (
     <div>
-      <p className="">Homepage</p>
+      <p className="  text-primary font-semibold">Homepage</p>
     </div>
   );
 }

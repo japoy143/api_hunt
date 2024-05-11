@@ -5,7 +5,12 @@ export default {
     extend: {
       fontFamily: {
         poppins: "Poppins",
-        rubik: "Rubik Mono One",
+      },
+      textColor: {
+        primary: "#151515",
+      },
+      colors: {
+        buttonColor: "#151515",
       },
     },
   },
