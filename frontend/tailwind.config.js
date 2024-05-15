@@ -12,6 +12,10 @@ export default {
       colors: {
         buttonColor: "#151515",
       },
+      backgroundColor: {
+        buttonColor: "#151515",
+        bgwhite: "#F5F7F8",
+      },
     },
   },
   plugins: [],
