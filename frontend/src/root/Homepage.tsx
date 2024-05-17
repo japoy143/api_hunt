@@ -33,8 +33,8 @@ function Homepage() {
         </div>
         <br />
 
-        <div className=" overflow-scroll h-[800px]">
-          <ApiCardsList data={APIList} />
+        <div className=" overflow-scroll h-[700px]">
+          <ApiCardsList data={APIList} searchInput={searchInput} />
         </div>
       </main>
     </Layout>
