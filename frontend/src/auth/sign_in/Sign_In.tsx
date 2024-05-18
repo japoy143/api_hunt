@@ -1,9 +1,31 @@
 import { useState } from "react";
 import TextInput from "../../components/TextInput";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function SignIn() {
+  const navigate = useNavigate();
   const [Email, setEmail] = useState<string>("");
   const [Password, setPassword] = useState<string>("");
+
+  const Login = async (Email: string, Password: string) => {
+    const user = await axios.post("http://localhost:3000/Users/Login", {
+      email: Email,
+      password: Password,
+    });
+
+    if (user.data === "Success") {
+      navigate("/");
+      console.log(user.data);
+    } else {
+      console.log("Error", user.data);
+    }
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    Login(Email, Password);
+  };
 
   return (
     <div className=" relative h-full w-full">
@@ -26,7 +48,7 @@ function SignIn() {
             Sign in to your Account
           </p>
 
-          <form className=" space-y-4 font-poppins">
+          <form className=" space-y-4 font-poppins" onSubmit={handleSubmit}>
             <div>
               <label>Email</label>
               <TextInput
@@ -47,7 +69,10 @@ function SignIn() {
             </div>
 
             <div className="  flex flex-row justify-center">
-              <button className=" h-10 w-28  bg-primary rounded-md border-2  font-semibold">
+              <button
+                className=" h-10 w-28  bg-primary rounded-md border-2  font-semibold"
+                type="submit"
+              >
                 Sign In
               </button>
             </div>

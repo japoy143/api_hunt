@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom";
+
 function Navbar() {
+  const navigate = useNavigate();
   return (
     <nav className=" w-screen  p-4 shadow-md flex flex-row items-center  justify-between ">
       <div className="w-20"></div>
@@ -8,7 +11,10 @@ function Navbar() {
         <img src="/icons/confetti.svg" className=" h-4 w-4" />
       </div>
 
-      <button className=" h-8  w-20 bg-buttonColor text-white rounded">
+      <button
+        className=" h-8  w-20 bg-buttonColor text-white rounded  cursor-pointer"
+        onClick={() => navigate("/SignUp")}
+      >
         Login
       </button>
     </nav>

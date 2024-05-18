@@ -1,16 +1,41 @@
 import { useState } from "react";
 import TextInput from "../../components/TextInput";
-
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 function SignUp() {
+  const navigate = useNavigate();
   const [Email, setEmail] = useState<string>("");
   const [Password, setPassword] = useState<string>("");
   const [ConfirmPassword, setConfirmPassword] = useState<string>("");
+
+  const SignUp = async (
+    Email: string,
+    Password: string,
+    ConfirmPassword: string
+  ) => {
+    if (Password === ConfirmPassword) {
+      const response = await axios.post("http://localhost:3000/Users/SignUp", {
+        email: Email,
+        password: Password,
+      });
+      console.log("Successfully SignUp", response.data);
+      navigate("/Login");
+    } else {
+      console.log("Incorrect Password");
+    }
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    SignUp(Email,Password,ConfirmPassword)
+  };
+
   return (
     <div className=" relative h-full w-full">
       <div className=" h-full w-full grid grid-cols-4 ">
         <div></div>
         <div className=" h-full w-full col-span-3  place-content-center">
-          <img src="/public/bg/bg.svg" className=" h-[70%] w-[100%] " />
+          <img src="/bg/bg.svg" className=" h-[70%] w-[100%] " />
         </div>
       </div>
       <div className=" absolute h-full w-full grid grid-cols-2 top-0">
@@ -26,7 +51,10 @@ function SignUp() {
             Sign in to your Account
           </p>
 
-          <form className=" space-y-4 font-poppins">
+          <form
+            className=" space-y-4 font-poppins"
+            onSubmit={handleSubmit}
+          >
             <div>
               <label>Email</label>
               <TextInput
@@ -56,7 +84,10 @@ function SignUp() {
             </div>
 
             <div className="  flex flex-row justify-center">
-              <button className=" h-10 w-28  bg-primary rounded-md border-2  font-semibold">
+              <button
+                className=" h-10 w-28  bg-primary rounded-md border-2  font-semibold"
+                type="submit"
+              >
                 Sign Up
               </button>
             </div>

@@ -27,6 +27,9 @@ mongoose
   .catch(() => console.log(`DB connection failed`.red));
 
 //TODO:change the route name
-const APIRoute = require("./routes/sampleRoute");
+const APIRoute = require("./routes/APIListRoute");
+const UserRoute = require("./routes/userRoute");
 
 app.use("/APIs", APIRoute);
+
+app.use("/Users", UserRoute);
