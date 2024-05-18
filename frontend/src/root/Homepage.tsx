@@ -1,11 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "./Layout";
 import Navbar from "./Navbar/Navbar";
 import ApiCardsList from "../components/ApiCardsList";
-import { APIList } from "../models/APILists";
+
+import axios from "axios";
+import { APIType } from "../types";
 
 function Homepage() {
   const [searchInput, setSearchInput] = useState<string>("");
+  const [data, setData] = useState<APIType[]>([]);
+
+  useEffect(() => {
+    //fetch all the data
+    const fetch = async () => {
+      const response = await axios.get("http://localhost:3000/APIs/");
+      setData(response.data);
+    };
+
+    fetch();
+  }, []);
   return (
     <Layout>
       <Navbar />
@@ -34,7 +47,7 @@ function Homepage() {
         <br />
 
         <div className=" overflow-scroll h-[700px]">
-          <ApiCardsList data={APIList} searchInput={searchInput} />
+          <ApiCardsList data={data} searchInput={searchInput} />
         </div>
       </main>
     </Layout>
