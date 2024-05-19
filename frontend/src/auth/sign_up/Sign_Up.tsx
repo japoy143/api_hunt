@@ -1,7 +1,8 @@
 import { useState } from "react";
 import TextInput from "../../components/TextInput";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 function SignUp() {
   const navigate = useNavigate();
   const [Email, setEmail] = useState<string>("");
@@ -13,21 +14,30 @@ function SignUp() {
     Password: string,
     ConfirmPassword: string
   ) => {
-    if (Password === ConfirmPassword) {
-      const response = await axios.post("http://localhost:3000/Users/SignUp", {
-        email: Email,
-        password: Password,
-      });
-      console.log("Successfully SignUp", response.data);
-      navigate("/Login");
+    if (Password.length >= 8) {
+      if (Password === ConfirmPassword) {
+        const response = await axios.post(
+          "http://localhost:3000/Users/SignUp",
+          {
+            email: Email,
+            password: Password,
+          }
+        );
+        console.log("Successfully SignUp", response.data);
+        navigate("/Login");
+        toast.success("Account Successfully Created");
+      } else {
+        console.log("Incorrect Password");
+        toast.warning("Incorrect Password");
+      }
     } else {
-      console.log("Incorrect Password");
+      toast.warning("Password must be atleast 8 character long");
     }
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    SignUp(Email,Password,ConfirmPassword)
+    SignUp(Email, Password, ConfirmPassword);
   };
 
   return (
@@ -38,8 +48,9 @@ function SignUp() {
           <img src="/bg/bg.svg" className=" h-[70%] w-[100%] " />
         </div>
       </div>
+      {/* Login Form*/}
       <div className=" absolute h-full w-full grid grid-cols-2 top-0">
-        <div className=" col-span-1  px-14 flex flex-col  justify-center space-y-2 bg-gray-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 ">
+        <div className=" col-span-1   px-20 lg:px-60 flex flex-col  justify-center space-y-2 bg-gray-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 ">
           <div className=" flex flex-row  justify-center  items-center space-x-4">
             <img src="/icons/confetti.svg" className="h-4 w-4   -rotate-90" />
             <p className=" text-primary font-poppins text-2xl font-medium">
@@ -51,36 +62,48 @@ function SignUp() {
             Sign in to your Account
           </p>
 
-          <form
-            className=" space-y-4 font-poppins"
-            onSubmit={handleSubmit}
-          >
+          <form className=" space-y-4 font-poppins" onSubmit={handleSubmit}>
             <div>
               <label>Email</label>
               <TextInput
                 className="h-8 w-[100%] rounded-md px-2 border-2 border-primary "
+                type="email"
                 value={Email}
                 onChange={setEmail}
                 placeholder="Email"
+                required
               />
             </div>
             <div>
               <label>Password</label>
               <TextInput
                 className="h-8 w-[100%] rounded-md px-2 border-2 border-primary "
+                type="password"
                 value={Password}
                 onChange={setPassword}
                 placeholder="Password"
+                required
               />
             </div>
             <div>
               <label>ConfirmPassword</label>
               <TextInput
+                type="password"
                 className="h-8 w-[100%] rounded-md px-2 border-2 border-primary "
                 value={ConfirmPassword}
                 onChange={setConfirmPassword}
                 placeholder="ConfirmPassword"
+                required
               />
+            </div>
+
+            <div className=" flex flex-row items-center justify-center">
+              <Link
+                to={"/Login"}
+                className=" text-sm font-semibold underline   "
+              >
+                Already have an account?
+              </Link>
             </div>
 
             <div className="  flex flex-row justify-center">

@@ -15,7 +15,7 @@ function Navbar() {
         className=" h-8  w-20 bg-buttonColor text-white rounded  cursor-pointer"
         onClick={() => navigate("/SignUp")}
       >
-        Login
+        SignUp
       </button>
     </nav>
   );

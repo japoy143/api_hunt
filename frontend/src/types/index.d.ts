@@ -4,6 +4,8 @@ export type InputProps = {
   placeholder: string;
   onChange: (value: string) => void;
   className: string;
+  type: string;
+  required?: boolean;
 };
 
 export type User = {
@@ -20,4 +22,9 @@ export type APIType = {
   key: boolean;
   comments: User[];
   likes: number;
+};
+
+//islogin or User Status
+export type UserStatus = {
+  id: number;
 };
