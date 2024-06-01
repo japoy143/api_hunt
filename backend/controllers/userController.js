@@ -3,12 +3,14 @@ const user = require("../models/userModel");
 
 //add user
 const addUser = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, avatar, isLogin } = req.body;
 
   try {
     const newUser = await user.create({
       email: email,
       password: password,
+      avatar: avatar,
+      isLogin: isLogin,
     });
     return res.status(200).json({ Message: "Sign Up Successfully", newUser });
   } catch (error) {
@@ -33,7 +35,7 @@ const loginUser = async (req, res) => {
   const isUser = await user.findOne({ email });
   if (isUser) {
     if (isUser.password === password) {
-      return res.status(200).json("Success");
+      return res.status(200).json({ Message: "Success", id: isUser._id });
     } else {
       return res.status(404).json({ Message: "Incorrect Password" });
     }

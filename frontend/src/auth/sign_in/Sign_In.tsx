@@ -18,7 +18,7 @@ function SignIn() {
       password: Password,
     });
 
-    if (user.data === "Success") {
+    if (user.data["Message"] === "Success") {
       toast.success("Login Successfully");
       navigate("/");
       console.log(user.data);

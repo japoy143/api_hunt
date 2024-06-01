@@ -372,7 +372,7 @@ export const APIList: APIType[] = [
     description: "	Free Bible API with multiple languages",
     comments: [],
     likes: 0,
-  },
+  }, 
   {
     name: "Crossref Metadata Search",
     category: "Books",
@@ -531,7 +531,7 @@ export const APIList: APIType[] = [
     description: "File Sharing and Storage",
     comments: [],
     likes: 0,
-  },
+  },//3rd
   {
     name: "Azure",
     category: "Continuous Integration",
@@ -663,6 +663,7 @@ export const APIList: APIType[] = [
     comments: [],
     likes: 0,
   },
+
   {
     name: "Amdoren",
     category: "Currency Exchange",
@@ -803,9 +804,7 @@ export const APIList: APIType[] = [
     comments: [],
     likes: 0,
   },
-  
 ];
-
 
 //second batch
 
@@ -829,7 +828,6 @@ export const APIList: APIType[] = [
 //     likes: 0,
 //   },
 // }
-
 
 //  APIList.map(async (api: APIType) => {
 //       const { name, category, link, description, key, comments, likes } = api;

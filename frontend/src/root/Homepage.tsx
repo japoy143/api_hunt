@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Layout from "./Layout";
 import Navbar from "./Navbar/Navbar";
 import ApiCardsList from "../components/ApiCardsList";
+import MyListLoader from "../components/Loader";
 
 import axios from "axios";
 import { APIType } from "../types";
@@ -9,15 +10,20 @@ import { APIType } from "../types";
 function Homepage() {
   const [searchInput, setSearchInput] = useState<string>("");
   const [data, setData] = useState<APIType[]>([]);
+  const [isDataReady, setIsDataReady] = useState<boolean>(false);
 
   useEffect(() => {
-    //fetch all the data
-    const fetch = async () => {
-      const response = await axios.get("http://localhost:3000/APIs/");
-      setData(response.data);
-    };
+    const fetchData = async () => {
+      const res = await axios.get("http://localhost:3000/APIs/");
 
-    fetch();
+      if (res.status === 200) {
+        setData(res.data);
+        setIsDataReady(true);
+      } else {
+        console.error(res.status);
+      }
+    };
+    fetchData();
   }, []);
   return (
     <Layout>
@@ -46,8 +52,14 @@ function Homepage() {
         </div>
         <br />
 
-        <div className=" overflow-scroll h-[700px]">
-          <ApiCardsList data={data} searchInput={searchInput} />
+        <div className="  overflow-scroll h-[700px] ">
+          {(isDataReady && (
+            <ApiCardsList data={data} searchInput={searchInput} />
+          )) || (
+            <div className=" flex flex-col items-center justify-center">
+              <MyListLoader />
+            </div>
+          )}
         </div>
       </main>
     </Layout>

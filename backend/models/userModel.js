@@ -12,6 +12,14 @@ const User = new Schema(
       type: String,
       required: true,
     },
+    avatar: {
+      type: Number,
+      required: true,
+    },
+    isLogin: {
+      type: Boolean,
+      required: true,
+    },
   },
   { timestamps: true }
 );

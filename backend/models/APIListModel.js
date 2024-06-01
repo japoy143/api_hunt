@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const APIList = new Schema(
+const APIs = new Schema(
   {
     name: {
       type: String,
@@ -36,4 +36,4 @@ const APIList = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("APIList", APIList);
+module.exports = mongoose.model("APIs", APIs);

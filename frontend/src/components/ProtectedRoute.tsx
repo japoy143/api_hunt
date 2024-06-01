@@ -6,14 +6,14 @@ import { RootState } from "../redux/store";
 type ProtectedRouteProps = PropsWithChildren;
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const user = useSelector((state: RootState) => state.auth.id);
+  const user = useSelector((state: RootState) => state.auth.isLogin);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user === 0) {
+    if (!user) {
       navigate("/", { replace: true });
     }
-    if (user === 1) {
+    if (user) {
       navigate("/User");
     }
   }, [navigate, user]);

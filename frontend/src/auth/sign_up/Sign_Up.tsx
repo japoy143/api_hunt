@@ -21,6 +21,8 @@ function SignUp() {
           {
             email: Email,
             password: Password,
+            avatar: 0,
+            isLogin: false,
           }
         );
         console.log("Successfully SignUp", response.data);

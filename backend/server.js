@@ -21,7 +21,7 @@ app.use((req, res, next) => {
 mongoose
   .connect(MONGO_URI)
   .then(() => {
-    app.listen(PORT, () => console.log(`Listeneng on PORT ${PORT}`.blue));
+    app.listen(PORT, () => console.log(`Listening on PORT ${PORT}`.blue));
     console.log(`DB Successfully connected`.blue);
   })
   .catch(() => console.log(`DB connection failed`.red));

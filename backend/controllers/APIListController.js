@@ -49,6 +49,16 @@ const getAPI = async (req, res) => {
   return res.status(200).json({ Message: "Data Found", API });
 };
 
+const getByName = async (req, res) => {
+  const { name } = req.body;
+  const API = await api_list.findOne({ name });
+  if (!API) {
+    return res.status(200).json("NotExist");
+  } else {
+    return res.status(404).json("Exist");
+  }
+};
+
 //delete API
 const deleteAPI = async (req, res) => {
   const { id } = req.params;
@@ -91,4 +101,5 @@ module.exports = {
   getAPI,
   deleteAPI,
   updateAPI,
+  getByName,
 };

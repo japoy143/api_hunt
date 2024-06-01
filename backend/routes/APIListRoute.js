@@ -7,6 +7,7 @@ const {
   getAPIs,
   deleteAPI,
   updateAPI,
+  getByName,
 } = require("../controllers/APIListController");
 
 //POST
@@ -18,6 +19,8 @@ route.get("/", getAPIs);
 //GET SPECIFIC
 route.get("/:id", getAPI);
 
+//GETBYNAME
+route.post("/name", getByName);
 //DELETE
 route.delete("/:id", deleteAPI);
 

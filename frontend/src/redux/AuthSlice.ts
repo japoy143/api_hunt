@@ -1,10 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface UserId {
+  isLogin: boolean;
   id: number;
 }
 
 const initialState: UserId = {
+  isLogin: false,
   id: 0,
 };
 
@@ -13,10 +15,10 @@ export const UserAuthSlice = createSlice({
   initialState,
   reducers: {
     login: (state) => {
-      state.id = 1;
+      state.isLogin = true;
     },
     logout: (state) => {
-      state.id = 0;
+      state.isLogin = false;
     },
   },
 });
