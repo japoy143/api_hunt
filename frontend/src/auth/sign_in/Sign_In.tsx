@@ -18,11 +18,21 @@ function SignIn() {
       password: Password,
     });
 
-    if (user.data["Message"] === "Success") {
+    if (user.data.Message === "Success") {
       toast.success("Login Successfully");
       navigate("/");
+      const { email, id } = user.data;
+      dispatch(login({ email, id }));
+
       console.log(user.data);
-    } else {
+    }
+
+    if (user.data["Message"] === "Incorrect Password") {
+      console.log("Error", user.data);
+      toast.warning("Incorrect Password");
+    }
+
+    if (user.data["Message"] === "User Doesn't Exist") {
       console.log("Error", user.data);
       toast.warning("Please Create An Account");
     }
@@ -31,7 +41,6 @@ function SignIn() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     Login(Email, Password);
-    dispatch(login());
   };
 
   return (

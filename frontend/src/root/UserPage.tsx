@@ -10,7 +10,7 @@ function UserPage() {
   const [searchInput, setSearchInput] = useState<string>("");
   const [data, setData] = useState<APIType[]>([]);
   const [isDataReady, setIsDataReady] = useState<boolean>(false);
-
+  
   useEffect(() => {
     const fetchData = async () => {
       const res = await axios.get("http://localhost:3000/APIs/");

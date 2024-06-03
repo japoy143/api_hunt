@@ -4,6 +4,7 @@ const {
   addUser,
   loginUser,
   getAllUser,
+  updateUser,
 } = require("../controllers/userController");
 
 //POST
@@ -21,6 +22,6 @@ route.get("/:id");
 route.delete("/:id");
 
 //UPDATE
-route.patch("/:id");
+route.patch("/:id", updateUser);
 
 module.exports = route;

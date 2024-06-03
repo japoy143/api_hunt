@@ -23,6 +23,8 @@ function Navbar() {
   const [profileAvatar, setProfileAvatar] = useState<number | null>(null);
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.auth.isLogin);
+  const userEmail = useSelector((state: RootState) => state.auth.email);
+  const removeEmail = userEmail.split("@");
   const dispatch = useDispatch();
 
   const onHandleLogout = () => {
@@ -33,30 +35,35 @@ function Navbar() {
   return (
     <nav className=" w-screen  p-4 shadow-md flex flex-row items-center  justify-between ">
       {user ? (
-        <div
-          className="  relative flex flex-row items-center justify-center bg-slate-200 rounded-full h-10 w-10"
-          onClick={() => setAvatar((prev) => !prev)}
-        >
-          <img
-            src={
-              profileAvatar === null
-                ? "/icons/avatar.svg"
-                : Img[profileAvatar].img
-            }
-            className=" h-full w-full"
-          />
-          <img
-            src="/icons/change.svg"
-            className="h-4 w-4 absolute top-1 left-8"
-          />
-          {avatar && (
-            <div className="bg-bgwhite h-20 w-[200px] rounded-md absolute left-0 top-16">
-              <ChangeAvatar
-                avatars={Img}
-                setAvatar={(val) => setProfileAvatar(val)}
-              />
-            </div>
-          )}
+        <div className=" flex flex-row items-center space-x-4 max-w-44 text-ellipsis font-poppins">
+          <div
+            className="  relative flex flex-row items-center justify-center bg-slate-200 rounded-full h-10 w-10"
+            onClick={() => setAvatar((prev) => !prev)}
+          >
+            <img
+              src={
+                profileAvatar === null
+                  ? "/icons/avatar.svg"
+                  : Img[profileAvatar].img
+              }
+              className=" h-full w-full"
+            />
+
+            <img
+              src="/icons/change.svg"
+              className="h-4 w-4 absolute top-1 left-8"
+            />
+
+            {avatar && (
+              <div className="bg-bgwhite h-20 w-[200px] rounded-md absolute left-0 top-16">
+                <ChangeAvatar
+                  avatars={Img}
+                  setAvatar={(val) => setProfileAvatar(val)}
+                />
+              </div>
+            )}
+          </div>
+          <p>{removeEmail[0]}</p>
         </div>
       ) : (
         <div className="w-44"></div>
