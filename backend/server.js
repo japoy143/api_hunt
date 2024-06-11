@@ -3,6 +3,8 @@ require("dotenv").config();
 require("colors");
 const mongoose = require("mongoose");
 const cors = require("cors");
+//cookie parser
+const cookiePaser = require("cookie-parser");
 
 const app = express();
 
@@ -10,8 +12,16 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI;
 
-app.use(cors());
+//fix cookie
+app.use(
+  cors({
+    origin: ["http://localhost:5173"],
+    methods: ["GET", "POST"],
+    credentials: true,
+  })
+);
 app.use(express.json());
+app.use(cookiePaser());
 // show all the method
 app.use((req, res, next) => {
   console.log(req.path, req.method, req.params);

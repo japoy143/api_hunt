@@ -1,49 +1,64 @@
-import { useState } from "react";
-import TextInput from "../../components/TextInput";
-import axios from "axios";
+import { useState, useEffect } from "react";
+
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-function SignUp() {
-  const navigate = useNavigate();
-  const [Email, setEmail] = useState<string>("");
-  const [Password, setPassword] = useState<string>("");
-  const [ConfirmPassword, setConfirmPassword] = useState<string>("");
+import axios from "../../api/axios";
 
-  const SignUp = async (
-    Email: string,
-    Password: string,
-    ConfirmPassword: string
-  ) => {
-    if (Password.length >= 8) {
-      if (Password === ConfirmPassword) {
-        const response = await axios.post(
-          "http://localhost:3000/Users/SignUp",
-          {
-            email: Email,
-            password: Password,
-            avatar: 0,
-            isLogin: false,
-          }
-        );
-        console.log("Successfully SignUp", response.data);
-        navigate("/Login");
-        toast.success("Account Successfully Created");
-      } else {
-        console.log("Incorrect Password");
-        toast.warning("Incorrect Password");
+const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,24}$/;
+const Register_Url = "/Users/SignUp";
+
+function SignUp() {
+  const navigation = useNavigate();
+
+  const [email, setEmail] = useState<string>("");
+
+  const [password, setPassword] = useState<string>("");
+  const [validPassword, setValidPassword] = useState<boolean>(false);
+  const [passwordFocus, setPasswordFocus] = useState<boolean>(false);
+
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [validMatch, setValidMatchPassword] = useState<boolean>(false);
+  const [matchFocus, setMatchFocus] = useState<boolean>(false);
+
+  useEffect(() => {
+    const result = PWD_REGEX.test(password);
+    setValidPassword(result);
+  }, [password]);
+
+  useEffect(() => {
+    const match = password === confirmPassword;
+    setValidMatchPassword(match);
+  }, [password, confirmPassword]);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const v1 = PWD_REGEX.test(password);
+    if (!v1) {
+      toast.error("Invalid Entry");
+      return;
+    }
+    try {
+      const response = await axios.post(Register_Url, {
+        email,
+        password,
+        avatar: 0,
+        isLogin: false,
+      });
+      console.log(response.data);
+      toast.success("Sign Up Successfully");
+      navigation("/Login");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      if (!err?.response) {
+        toast.error("No Server Response");
+      } else if (err.response?.status === 409) {
+        toast.error("Email taken");
       }
-    } else {
-      toast.warning("Password must be atleast 8 character long");
     }
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    SignUp(Email, Password, ConfirmPassword);
-  };
-
   return (
-    <div className=" relative h-full w-full">
+    <section className=" relative h-full w-full">
       <div className=" h-full w-full grid grid-cols-4 ">
         <div></div>
         <div className=" h-full w-full col-span-3  place-content-center">
@@ -64,42 +79,72 @@ function SignUp() {
             Sign in to your Account
           </p>
 
-          <form className=" space-y-4 font-poppins" onSubmit={handleSubmit}>
-            <div>
-              <label>Email</label>
-              <TextInput
-                className="h-8 w-[100%] rounded-md px-2 border-2 border-primary "
-                type="email"
-                value={Email}
-                onChange={setEmail}
-                placeholder="Email"
-                required
-              />
-            </div>
-            <div>
-              <label>Password</label>
-              <TextInput
-                className="h-8 w-[100%] rounded-md px-2 border-2 border-primary "
-                type="password"
-                value={Password}
-                onChange={setPassword}
-                placeholder="Password"
-                required
-              />
-            </div>
-            <div>
-              <label>ConfirmPassword</label>
-              <TextInput
-                type="password"
-                className="h-8 w-[100%] rounded-md px-2 border-2 border-primary "
-                value={ConfirmPassword}
-                onChange={setConfirmPassword}
-                placeholder="ConfirmPassword"
-                required
-              />
-            </div>
+          <form className="font-poppins" onSubmit={handleSubmit}>
+            <label className="" htmlFor="email">
+              Email
+            </label>
+            <input
+              className=" w-[100%] h-8  rounded pl-2 mt-2 mb-2 "
+              type="email"
+              id="email"
+              autoComplete="off"
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
 
-            <div className=" flex flex-row items-center justify-center">
+            <label className=" " htmlFor="password">
+              Password
+            </label>
+            <input
+              className=" w-[100%] h-8  rounded pl-2 mt-2 mb-2"
+              type="password"
+              id="password"
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              aria-invalid={validPassword ? "false" : "true"}
+              aria-describedby="pwdnote"
+              onFocus={() => setPasswordFocus(true)}
+              onBlur={() => setPasswordFocus(false)}
+            />
+            <p
+              id="pwdnote"
+              className={
+                passwordFocus && !validPassword
+                  ? "  text-xs  text-justify "
+                  : "hidden"
+              }
+            >
+              8 to 24 characters. <br />
+              Must include uppercase and lowercase letters and a number.
+            </p>
+
+            <label className=" " htmlFor="confirmpassword">
+              Confirm Password
+            </label>
+            <input
+              className=" w-[100%] h-8  rounded pl-2 mt-2 mb-2"
+              type="password"
+              id="confirmpassword"
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              aria-invalid={validMatch ? "false" : "true"}
+              aria-describedby="validmatchpassword"
+              onFocus={() => setMatchFocus(true)}
+              onBlur={() => setMatchFocus(false)}
+            />
+            <p></p>
+            <p
+              id="validmatchpassword"
+              className={
+                matchFocus && !validMatch
+                  ? "  text-xs  text-justify "
+                  : "hidden"
+              }
+            >
+              the password must match
+            </p>
+
+            <div className=" flex flex-row items-center justify-center mt-4  mb-2">
               <Link
                 to={"/Login"}
                 className=" text-sm font-semibold underline   "
@@ -111,7 +156,9 @@ function SignUp() {
             <div className="  flex flex-row justify-center">
               <button
                 className=" h-10 w-28  bg-primary rounded-md border-2  font-semibold"
-                type="submit"
+                disabled={
+                  !email || !validMatch || !validPassword ? true : false
+                }
               >
                 Sign Up
               </button>
@@ -119,7 +166,7 @@ function SignUp() {
           </form>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 

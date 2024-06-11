@@ -1,5 +1,4 @@
 import { useState } from "react";
-import TextInput from "../../components/TextInput";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -12,6 +11,8 @@ function SignIn() {
   const [Password, setPassword] = useState<string>("");
   const dispatch = useDispatch();
 
+  axios.defaults.withCredentials = true;
+
   const Login = async (Email: string, Password: string) => {
     const user = await axios.post("http://localhost:3000/Users/Login", {
       email: Email,
@@ -19,23 +20,26 @@ function SignIn() {
     });
 
     if (user.data.Message === "Success") {
+      const { email, id, accessToken } = user.data;
+      if (!accessToken) return toast.error("Unauthorize User");
+
+      dispatch(login({ email, id }));
+      console.log(user.data);
       toast.success("Login Successfully");
       navigate("/");
-      const { email, id } = user.data;
-      dispatch(login({ email, id }));
-
-      console.log(user.data);
     }
 
-    if (user.data["Message"] === "Incorrect Password") {
+    if (user.data === "Incorrect Password") {
       console.log("Error", user.data);
       toast.warning("Incorrect Password");
+      console.log(user.status);
     }
 
-    if (user.data["Message"] === "User Doesn't Exist") {
+    if (user.status === 203) {
       console.log("Error", user.data);
       toast.warning("Please Create An Account");
     }
+    console.log(user.status);
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -67,24 +71,32 @@ function SignIn() {
 
           <form className=" space-y-4 font-poppins" onSubmit={handleSubmit}>
             <div>
-              <label>Email</label>
-              <TextInput
-                className="h-8 w-[100%] rounded-md px-2 border-2 border-primary "
-                type="text"
-                value={Email}
-                onChange={setEmail}
-                placeholder="Email"
-              />
+              <label htmlFor="mail">
+                Email
+                <input
+                  className="w-[100%] h-8  rounded pl-2 mt-2 mb-2"
+                  id="mail"
+                  type="email"
+                  value={Email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  autoComplete="off"
+                />
+              </label>
             </div>
             <div>
-              <label>Password</label>
-              <TextInput
-                className="h-8 w-[100%] rounded-md px-2 border-2 border-primary "
-                type="password"
-                value={Password}
-                onChange={setPassword}
-                placeholder="Password"
-              />
+              <label htmlFor="pwd">
+                Password
+                <input
+                  className="w-[100%] h-8  rounded pl-2 mt-2 mb-2"
+                  id="pwd"
+                  type=" password"
+                  autoComplete="off"
+                  value={Password}
+                  required
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </label>
             </div>
             <div className=" flex flex-row justify-between text-sm font-semibold underline">
               <Link to={"/SignUp"}> Create An Account</Link>

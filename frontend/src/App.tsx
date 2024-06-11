@@ -8,6 +8,10 @@ import { store } from "./redux/store";
 import { Provider } from "react-redux";
 import ProtectedRoute from "./components/ProtectedRoute";
 import UserPage from "./root/UserPage";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
+
+const persistor = persistStore(store);
 
 const router = createBrowserRouter([
   {
@@ -39,10 +43,12 @@ function App() {
   return (
     <React.StrictMode>
       <Provider store={store}>
-        <main className=" h-screen w-screen overflow-hidden">
-          <Toaster position="top-center" duration={1500} />
-          <RouterProvider router={router} />
-        </main>
+        <PersistGate persistor={persistor}>
+          <main className=" h-screen w-screen overflow-hidden">
+            <Toaster position="top-center" duration={1500} />
+            <RouterProvider router={router} />
+          </main>
+        </PersistGate>
       </Provider>
     </React.StrictMode>
   );
