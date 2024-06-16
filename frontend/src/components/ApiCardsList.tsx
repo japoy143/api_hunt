@@ -55,7 +55,7 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
     ) {
       return (
         <article
-          className={`mt-4 grid w-full grid-rows-1 rounded-lg bg-bgwhite p-10 font-poppins ${api.isCommentSection ? "h-[400px]" : "h-[140px]"}`}
+          className={`mt-4 grid w-full grid-rows-2 rounded-lg bg-bgwhite p-10 font-poppins ${api.isCommentSection ? "h-[400px]" : "h-[140px]"}`}
           key={i}
         >
           <div className="flex-1 space-y-2">
@@ -68,6 +68,9 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
                 {api.name}
               </a>
               <img src="/icons/link.svg" className="h-5 w-5 -rotate-6" />
+              <div>
+                <p className="text-end">{api.category}</p>
+              </div>
             </div>
 
             <div className="grid grid-cols-2">
@@ -75,7 +78,7 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
                 <p className="">{api.description}</p>
               </article>
               <aside className="flex flex-row justify-end space-x-4">
-                {/* //TODO:refactor this code cannot change state when logged */}
+              
                 <img
                   src="/icons/key.svg"
                   alt=""

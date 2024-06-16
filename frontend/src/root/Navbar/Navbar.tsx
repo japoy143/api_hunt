@@ -27,6 +27,7 @@ function Navbar() {
   const [avatar, setAvatar] = useState<boolean>(false);
   const [menu, setMenu] = useState<boolean>(false);
 
+  //user details
   const user = useSelector((state: RootState) => state.auth.isLogin);
   const userEmail = useSelector((state: RootState) => state.auth.email);
   const userId = useSelector((state: RootState) => state.auth.id);

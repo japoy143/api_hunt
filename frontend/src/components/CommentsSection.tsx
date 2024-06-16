@@ -29,6 +29,8 @@ function CommentsSection({ commentId }: commentSectionProps) {
   const data = useSelector((state: RootState) => state.api.data);
   const [comment, setComments] = useState<commentType[]>([]);
 
+  const userAvatar = useSelector((state: RootState) => state.auth.avatar);
+
   useEffect(() => {
     const filteredCommentSection = data.filter((api) => api._id === commentId);
     const userComments = filteredCommentSection.flatMap(
@@ -41,23 +43,22 @@ function CommentsSection({ commentId }: commentSectionProps) {
   return (
     <>
       {comment.map((comment) => (
-        <div className="mt-2 grid h-20 w-[70%] grid-cols-6 rounded-lg py-4 font-poppins">
-          <div className="col-span-1 flex flex-col items-center justify-center">
+        <div className="w-[50%]rounded-lg mt-2 flex h-[200px] flex-col items-start justify-start py-4">
+          <div className="flex flex-row items-center justify-center">
             <img
-              src={Img[comment.avatar].img}
-              className="mx-2 h-[70%] space-x-2"
+              src={
+                userAvatar === null ? "/icons/avatar.svg" : Img[userAvatar].img
+              }
+              className="mx-2 max-h-[40px] space-x-2"
             />
-          </div>
-
-          <div className="col-span-4 py-2">
-            <div className="flex flex-row items-center justify-between">
-              <p className="text-start text-sm">
-                {removeEmailSign(comment.email)}
-              </p>
+            <div className="flex flex-row items-center space-x-4">
+              <p className="text-sm">{removeEmailSign(comment.email)}</p>
               <p className="text-xs">{comment.timestamp}</p>
             </div>
+          </div>
 
-            <p className="text-sm">{comment.comment}</p>
+          <div className="h-[150px] max-w-[400px]">
+            <p className="pl-14">{comment.comment}</p>
           </div>
         </div>
       ))}
