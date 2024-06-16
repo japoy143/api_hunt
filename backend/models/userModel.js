@@ -14,11 +14,16 @@ const User = new Schema(
     },
     avatar: {
       type: Number,
-      required: true,
+      required: false,
+      default: null,
     },
     isLogin: {
       type: Boolean,
       required: true,
+    },
+    likes: {
+      type: [],
+      required: false,
     },
   },
   { timestamps: true }

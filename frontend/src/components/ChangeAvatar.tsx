@@ -1,18 +1,31 @@
-import { avatar } from "../root/Navbar/Navbar";
+import { useDispatch } from "react-redux";
+import { changeAvatar } from "../redux/AuthSlice";
+import { avatarType } from "../types";
+
 type ChangeAvatarProps = {
-  avatars: avatar[];
+  avatars: avatarType[];
   setAvatar: (value: number) => void;
+  updateAvatar: (val: number) => Promise<void>;
 };
 
-function ChangeAvatar({ avatars, setAvatar }: ChangeAvatarProps) {
+function ChangeAvatar({ avatars, setAvatar, updateAvatar }: ChangeAvatarProps) {
+  const dispatch = useDispatch();
   return (
-    <div className="h-full w-full  grid grid-cols-3 py-1  ">
+    <div className="grid h-full w-full grid-cols-3 grid-rows-3 py-1">
+      <p className="col-span-3 text-center font-poppins text-sm">
+        Change Avatar
+      </p>
+
       {avatars.map((profile, index) => (
-        <div className=" flex flex-row justify-center items-center">
+        <div className="flex flex-row items-center justify-center" key={index}>
           <img
             src={profile.img}
-            className="h-8 w-8 rounded-full  "
-            onClick={() => setAvatar(index)}
+            className="h-8 w-8 rounded-full"
+            onClick={async () => {
+              setAvatar(index);
+              updateAvatar(index);
+              dispatch(changeAvatar(index));
+            }}
           />
         </div>
       ))}

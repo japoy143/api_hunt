@@ -68,6 +68,7 @@ const loginUser = async (req, res) => {
       Message: "Success",
       id: isUser._id,
       email: email,
+      avatar: isUser.avatar,
       accessToken,
     });
   } else {
@@ -99,7 +100,7 @@ const updateUser = async (req, res) => {
   if (!User) {
     return res.status(404).json("Data Not Updated");
   }
-  return res.status(200).json("Login Successfully");
+  return res.status(200).json("Updated Successfully");
 };
 
 //refresh tokens
@@ -130,6 +131,23 @@ const handleRefreshToken = (req, res) => {
   });
 };
 
+//delete User
+const deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ Message: "Invalid ID" });
+  }
+
+  const User = await user.findByIdAndDelete({ _id: id });
+
+  if (!User) {
+    return res.status(404).json({ Message: "Data Not Deleted" });
+  }
+
+  return res.status(200).json({ Message: "Data Deleted Successfully", User });
+};
+
 module.exports = {
   addUser,
   loginUser,
@@ -137,4 +155,5 @@ module.exports = {
   getAllUser,
   updateUser,
   handleRefreshToken,
+  deleteUser,
 };

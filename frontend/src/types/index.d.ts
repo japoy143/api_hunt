@@ -8,23 +8,39 @@ export type InputProps = {
   required?: boolean;
 };
 
-export type User = {
-  username: string;
-  avatar: string;
+export type commentType = {
+  email: string;
+  userId: string;
+  avatar: number;
+  comment: string;
+  timestamp: string;
 };
-
 //API Types
 export type APIType = {
+  _id: string;
   name: string;
   category: string;
   link: string;
   description: string;
   key: boolean;
-  comments: User[];
+  comments: commentType[];
+  isCommentSection: boolean;
   likes: number;
 };
 
 //islogin or User Status
 export type UserStatus = {
   id: number;
+};
+
+//comment section typo
+export type commentType = {
+  avatar: 0;
+  comment: string;
+  timestamp: string;
+};
+
+//avatar type
+export type avatarType = {
+  img: string;
 };

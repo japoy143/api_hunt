@@ -41,7 +41,6 @@ function SignUp() {
       const response = await axios.post(Register_Url, {
         email,
         password,
-        avatar: 0,
         isLogin: false,
       });
       console.log(response.data);
@@ -58,25 +57,25 @@ function SignUp() {
   };
 
   return (
-    <section className=" relative h-full w-full">
-      <div className=" h-full w-full grid grid-cols-4 ">
+    <section className="relative h-full w-full">
+      <div className="grid h-full w-full grid-cols-4">
         <div></div>
-        <div className=" h-full w-full col-span-3  place-content-center">
-          <img src="/bg/bg.svg" className=" h-[70%] w-[100%] " />
+        <div className="col-span-3 h-full w-full place-content-center">
+          <img src="/bg/bg.svg" className="h-[70%] w-[100%]" />
         </div>
       </div>
       {/* Login Form*/}
-      <div className=" absolute h-full w-full grid grid-cols-2 top-0">
-        <div className=" col-span-1   px-20 lg:px-60 flex flex-col  justify-center space-y-2 bg-gray-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 ">
-          <div className=" flex flex-row  justify-center  items-center space-x-4">
-            <img src="/icons/confetti.svg" className="h-4 w-4   -rotate-90" />
-            <p className=" text-primary font-poppins text-2xl font-medium">
+      <div className="absolute top-0 grid h-full w-full grid-cols-2">
+        <div className="col-span-1 flex flex-col justify-center space-y-2 rounded-md bg-gray-400 bg-opacity-10 bg-clip-padding backdrop-blur-sm backdrop-filter xs:px-10 sm:px-14 md:px-14 lg:px-28 xl:px-52">
+          <div className="flex flex-row items-center justify-center space-x-4">
+            <img src="/icons/confetti.svg" className="h-4 w-4 -rotate-90" />
+            <p className="text-center font-poppins text-2xl font-medium text-primary">
               API Hunt
             </p>
             <img src="/icons/confetti.svg" className="h-4 w-4" />
           </div>
-          <p className=" text-center font-poppins font-medium">
-            Sign in to your Account
+          <p className="text-center font-poppins font-medium">
+            Sign Up to your Account
           </p>
 
           <form className="font-poppins" onSubmit={handleSubmit}>
@@ -84,7 +83,7 @@ function SignUp() {
               Email
             </label>
             <input
-              className=" w-[100%] h-8  rounded pl-2 mt-2 mb-2 "
+              className="mb-2 mt-2 h-8 w-[100%] rounded pl-2"
               type="email"
               id="email"
               autoComplete="off"
@@ -96,7 +95,7 @@ function SignUp() {
               Password
             </label>
             <input
-              className=" w-[100%] h-8  rounded pl-2 mt-2 mb-2"
+              className="mb-2 mt-2 h-8 w-[100%] rounded pl-2"
               type="password"
               id="password"
               onChange={(e) => setPassword(e.target.value)}
@@ -110,7 +109,7 @@ function SignUp() {
               id="pwdnote"
               className={
                 passwordFocus && !validPassword
-                  ? "  text-xs  text-justify "
+                  ? "text-justify text-xs"
                   : "hidden"
               }
             >
@@ -122,7 +121,7 @@ function SignUp() {
               Confirm Password
             </label>
             <input
-              className=" w-[100%] h-8  rounded pl-2 mt-2 mb-2"
+              className="mb-2 mt-2 h-8 w-[100%] rounded pl-2"
               type="password"
               id="confirmpassword"
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -136,26 +135,21 @@ function SignUp() {
             <p
               id="validmatchpassword"
               className={
-                matchFocus && !validMatch
-                  ? "  text-xs  text-justify "
-                  : "hidden"
+                matchFocus && !validMatch ? "text-justify text-xs" : "hidden"
               }
             >
               the password must match
             </p>
 
-            <div className=" flex flex-row items-center justify-center mt-4  mb-2">
-              <Link
-                to={"/Login"}
-                className=" text-sm font-semibold underline   "
-              >
+            <div className="mb-2 mt-4 flex flex-row items-center justify-center">
+              <Link to={"/Login"} className="text-sm font-semibold underline">
                 Already have an account?
               </Link>
             </div>
 
-            <div className="  flex flex-row justify-center">
+            <div className="flex flex-row justify-center">
               <button
-                className=" h-10 w-28  bg-primary rounded-md border-2  font-semibold"
+                className="bg-primary h-10 w-28 rounded-md border-2 font-semibold"
                 disabled={
                   !email || !validMatch || !validPassword ? true : false
                 }

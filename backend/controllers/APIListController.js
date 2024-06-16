@@ -3,7 +3,16 @@ const api_list = require("../models/APIListModel");
 
 //add API
 const addNewAPI = async (req, res) => {
-  const { name, category, link, description, key, likes, comments } = req.body;
+  const {
+    name,
+    category,
+    link,
+    description,
+    key,
+    likes,
+    isCommentSection,
+    comments,
+  } = req.body;
   try {
     const newAPI = await api_list.create({
       name: name,
@@ -12,6 +21,7 @@ const addNewAPI = async (req, res) => {
       description: description,
       key: key,
       likes: likes,
+      isCommentSection: isCommentSection,
       comments: comments,
     });
     return res

@@ -5,11 +5,13 @@ import ApiCardsList from "../components/ApiCardsList";
 import MyListLoader from "../components/Loader";
 
 import axios from "axios";
-import { APIType } from "../types";
+import { setAPI } from "../redux/APISlice";
+
+import { useDispatch } from "react-redux";
 
 function Homepage() {
   const [searchInput, setSearchInput] = useState<string>("");
-  const [data, setData] = useState<APIType[]>([]);
+  const dispatch = useDispatch();
   const [isDataReady, setIsDataReady] = useState<boolean>(false);
 
   useEffect(() => {
@@ -17,34 +19,35 @@ function Homepage() {
       const res = await axios.get("http://localhost:3000/APIs/");
 
       if (res.status === 200) {
-        setData(res.data);
+        dispatch(setAPI(res.data));
+        console.log(res.data);
         setIsDataReady(true);
       } else {
         console.error(res.status);
       }
     };
     fetchData();
-  }, []);
+  }, [dispatch]);
   return (
     <Layout>
       <Navbar />
-      <main className="w-screen p-20 ">
-        <h1 className=" text-center  text-4xl font-poppins font-medium">
+      <main className="w-screen p-20">
+        <h1 className="text-center font-poppins text-4xl font-medium">
           Explore API's
         </h1>
         <br />
-        <p className=" text-center font-poppins text-lg">
-          Find the exact API’s for your next project to Unlock the potential of
+        <p className="text-center font-poppins text-lg">
+          Find the exact APIs for your next project to Unlock the potential of
           your next project
         </p>
         <br />
-        <div className=" relative  w-full h-10  ">
+        <div className="relative h-10 w-full">
           <img
             src="/icons/search.svg"
-            className=" absolute h-6 w-6 top-2 left-4"
+            className="absolute left-4 top-2 h-6 w-6"
           />
           <input
-            className="  h-full w-full  bg-bgwhite rounded-md   px-14 font-poppins  outline-none"
+            className="h-full w-full rounded-md bg-bgwhite px-14 font-poppins outline-none"
             placeholder="Search"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
@@ -52,11 +55,9 @@ function Homepage() {
         </div>
         <br />
 
-        <div className="  overflow-scroll h-[700px] ">
-          {(isDataReady && (
-            <ApiCardsList data={data} searchInput={searchInput} />
-          )) || (
-            <div className=" flex flex-col items-center justify-center">
+        <div className="h-[700px] overflow-scroll">
+          {(isDataReady && <ApiCardsList searchInput={searchInput} />) || (
+            <div className="flex flex-col items-center justify-center">
               <MyListLoader />
             </div>
           )}

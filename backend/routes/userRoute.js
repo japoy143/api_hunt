@@ -7,6 +7,7 @@ const {
   getAllUser,
   updateUser,
   handleRefreshToken,
+  deleteUser,
 } = require("../controllers/userController");
 
 const verify = require("../middleware/verifyJWT");
@@ -29,7 +30,7 @@ route.get("/", verify, getAllUser);
 route.get("/:id");
 
 //DELETE
-route.delete("/:id");
+route.delete("/:id", deleteUser);
 
 //UPDATE
 route.patch("/:id", updateUser);

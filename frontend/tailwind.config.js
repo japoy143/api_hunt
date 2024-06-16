@@ -15,6 +15,10 @@ export default {
       backgroundColor: {
         buttonColor: "#151515",
         bgwhite: "#F5F7F8",
+        bgCommentSection: "#FFFFFF",
+      },
+      screens: {
+        xs: "400px",
       },
     },
   },

@@ -5,12 +5,14 @@ import { logout } from "../../redux/AuthSlice";
 import { toast } from "sonner";
 import { useState } from "react";
 import ChangeAvatar from "../../components/ChangeAvatar";
+import Menu from "../../components/Menu";
+import { avatarType } from "../../types";
+import axios from "../../api/axios";
 
-export type avatar = {
-  img: string;
-};
+//Update url
+const Update_Url = "/Users/";
 
-const Img: avatar[] = [
+const Img: avatarType[] = [
   { img: "/avatar/avatar_man1.svg" },
   { img: "/avatar/avatar_man2.svg" },
   { img: "/avatar/avatar_man3.svg" },
@@ -19,12 +21,19 @@ const Img: avatar[] = [
   { img: "/avatar/avatar_girl3.svg" },
 ];
 function Navbar() {
-  const [avatar, setAvatar] = useState<boolean>(false);
-  const [profileAvatar, setProfileAvatar] = useState<number | null>(null);
   const navigate = useNavigate();
+
+  //button states
+  const [avatar, setAvatar] = useState<boolean>(false);
+  const [menu, setMenu] = useState<boolean>(false);
+
   const user = useSelector((state: RootState) => state.auth.isLogin);
   const userEmail = useSelector((state: RootState) => state.auth.email);
-  const removeEmail = userEmail.split("@");
+  const userId = useSelector((state: RootState) => state.auth.id);
+  const userAvatar = useSelector((state: RootState) => state.auth.avatar);
+
+  const [profileAvatar, setProfileAvatar] = useState<number | null>(userAvatar);
+  const name = userEmail.split("@");
   const dispatch = useDispatch();
 
   const onHandleLogout = () => {
@@ -32,12 +41,28 @@ function Navbar() {
     toast.success("Logout Successfully");
   };
 
+  const onHandleChangeAvatar = async (val: number) => {
+    try {
+      const res = await axios.patch(`${Update_Url}${userId}`, {
+        avatar: val,
+      });
+      if (res.status === 200) {
+        toast.success("Avatar Changed");
+        console.log(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Change Avatar Error");
+      setProfileAvatar(null);
+    }
+  };
+
   return (
-    <nav className=" w-screen  p-4 shadow-md flex flex-row items-center  justify-between ">
+    <nav className="flex w-screen flex-row items-center justify-between p-4 shadow-md">
       {user ? (
-        <div className=" flex flex-row items-center space-x-4 max-w-44 text-ellipsis font-poppins">
+        <div className="flex max-w-44 flex-row items-center space-x-4 text-ellipsis font-poppins">
           <div
-            className="  relative flex flex-row items-center justify-center bg-slate-200 rounded-full h-10 w-10"
+            className="relative flex flex-row items-center justify-center rounded-full bg-slate-200 xs:h-6 xs:w-6 md:h-10 md:w-10"
             onClick={() => setAvatar((prev) => !prev)}
           >
             <img
@@ -46,57 +71,89 @@ function Navbar() {
                   ? "/icons/avatar.svg"
                   : Img[profileAvatar].img
               }
-              className=" h-full w-full"
+              className="h-full w-full"
             />
 
             <img
               src="/icons/change.svg"
-              className="h-4 w-4 absolute top-1 left-8"
+              className="absolute h-4 w-4 xs:left-4 xs:top-0 md:left-8 md:top-1"
             />
 
             {avatar && (
-              <div className="bg-bgwhite h-20 w-[200px] rounded-md absolute left-0 top-16">
+              <div className="h-26 absolute left-0 top-16 w-[200px] rounded-md bg-bgwhite">
                 <ChangeAvatar
                   avatars={Img}
                   setAvatar={(val) => setProfileAvatar(val)}
+                  updateAvatar={(val) => onHandleChangeAvatar(val)}
                 />
               </div>
             )}
           </div>
-          <p>{removeEmail[0]}</p>
+          <p className="xs:text-xs md:text-base">{name[0]}</p>
         </div>
       ) : (
-        <div className="w-44"></div>
+        <div className="xs:w-16 sm:w-44 md:w-44"></div>
       )}
-      <div className=" flex flex-row items-center space-x-4 ">
-        <img src="/icons/confetti.svg" className=" h-4 w-4   -rotate-90" />
-        <p className=" font-poppins font-medium text-2xl">API Hunt</p>
-        <img src="/icons/confetti.svg" className=" h-4 w-4" />
+      <div className="flex flex-row items-center space-x-4">
+        <img src="/icons/confetti.svg" className="h-4 w-4 -rotate-90" />
+        <p className="font-poppins text-2xl font-medium">API Hunt </p>
+        <img src="/icons/confetti.svg" className="h-4 w-4" />
       </div>
 
-      {user ? (
-        <button
-          className=" font-poppins h-8  w-20 bg-buttonColor text-white rounded  cursor-pointer"
-          onClick={onHandleLogout}
+      <div className="xs:hidden sm:flex">
+        {user ? (
+          <button
+            className="h-8 w-20 cursor-pointer rounded bg-buttonColor font-poppins text-white"
+            onClick={onHandleLogout}
+          >
+            Logout
+          </button>
+        ) : (
+          <div className="space-x-2">
+            <button
+              className="h-8 w-20 cursor-pointer rounded bg-buttonColor font-poppins text-white"
+              onClick={() => navigate("/SignUp")}
+            >
+              SignUp
+            </button>
+            <button
+              className="h-8 w-20 cursor-pointer rounded bg-buttonColor font-poppins text-white"
+              onClick={() => navigate("/LogIn")}
+            >
+              Login
+            </button>
+          </div>
+        )}
+      </div>
+      <div className={`relative sm:hidden md:hidden lg:hidden`}>
+        {user ? (
+          <div className="flex w-20 flex-row justify-center">
+            <button onClick={onHandleLogout}>
+              <img src="/icons/logout.svg" className="h-6 w-6 ease-out" />
+            </button>
+          </div>
+        ) : (
+          <button onClick={() => setMenu((prev) => !prev)}>
+            <img
+              src={menu ? "/icons/close.svg" : "/icons/menu.svg"}
+              className="h-6 w-6 ease-out"
+            />
+          </button>
+        )}
+
+        <div
+          className={
+            menu
+              ? "absolute right-0 top-14 flex h-24 w-28 flex-col justify-center space-y-2 rounded bg-bgwhite px-2"
+              : "hidden"
+          }
         >
-          Logout
-        </button>
-      ) : (
-        <div className=" space-x-2">
-          <button
-            className=" font-poppins h-8  w-20 bg-buttonColor text-white rounded  cursor-pointer"
-            onClick={() => navigate("/SignUp")}
-          >
-            SignUp
-          </button>
-          <button
-            className=" font-poppins h-8  w-20 bg-buttonColor text-white rounded  cursor-pointer"
-            onClick={() => navigate("/LogIn")}
-          >
-            Login
-          </button>
+          <Menu
+            signUp={(to, options) => navigate(to, options)}
+            logIn={(to, options) => navigate(to, options)}
+          />
         </div>
-      )}
+      </div>
     </nav>
   );
 }

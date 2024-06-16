@@ -32,6 +32,10 @@ const APIs = new Schema(
       type: [],
       required: true,
     },
+    isCommentSection: {
+      type: Boolean,
+      required: true,
+    },
   },
   { timestamps: true }
 );

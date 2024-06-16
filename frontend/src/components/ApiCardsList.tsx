@@ -1,67 +1,128 @@
 import { useNavigate } from "react-router-dom";
-import { APIType } from "../types";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import { updateIsCommentSection, postComment } from "../redux/APISlice";
+import CommentsSection from "./CommentsSection";
 
 type ApiCardsListProps = {
-  data: APIType[];
   searchInput: string;
 };
 
-function ApiCardsList({ data, searchInput }: ApiCardsListProps) {
+function ApiCardsList({ searchInput }: ApiCardsListProps) {
   const navigate = useNavigate();
+
+  //api list
+  const data = useSelector((state: RootState) => state.api.data);
+
+  //user Details
+  const isLogin = useSelector((state: RootState) => state.auth.isLogin);
+  const userAvatar = useSelector((state: RootState) => state.auth.avatar);
+  const userEmail = useSelector((state: RootState) => state.auth.email);
+  const userId = useSelector((state: RootState) => state.auth.id);
+
+  //date today
+  const timeToday = new Date();
+
+  // comment value
+  const [comment, setComment] = useState<string>("");
+
+  //controller
+  const dispatch = useDispatch();
+
+  console.log("isLogin", isLogin, data);
+  const handleSubmitComment = (id: string) => {
+    dispatch(
+      postComment({
+        id: id,
+        comment: {
+          email: userEmail,
+          userId: userId,
+          avatar: userAvatar,
+          comment: comment,
+          timestamp: timeToday.toLocaleTimeString(),
+        },
+      }),
+    );
+
+    setComment("");
+  };
+
   return data.map((api, i) => {
     if (
       api.category.toLowerCase().includes(searchInput.toLowerCase()) ||
       api.name.toLocaleLowerCase().includes(searchInput.toLocaleLowerCase())
     ) {
       return (
-        <div
-          className=" font-poppins bg-bgwhite w-full h-40 mt-4 rounded-lg flex flex-row"
+        <article
+          className={`mt-4 grid w-full grid-rows-1 rounded-lg bg-bgwhite p-10 font-poppins ${api.isCommentSection ? "h-[400px]" : "h-[140px]"}`}
           key={i}
         >
-          <div className="   text-ellipsis overflow-hidden w-[70%] p-6">
-            <div className=" flex flex-row space-x-2 ">
-              <h1 className=" text-xl font-medium underline hover:text-blue-600">
-                <a href={api.link} target={api.name}>
-                  {api.name}
-                </a>
-              </h1>
-              <img
-                src="/icons/link.svg"
-                title="link"
-                className=" h-5 w-5  -rotate-12 "
-              />
+          <div className="flex-1 space-y-2">
+            <div className="flex flex-row items-center space-x-2">
+              <a
+                className="cursor-pointer text-xl font-medium underline hover:text-blue-500"
+                href={api.link}
+                target="_blank"
+              >
+                {api.name}
+              </a>
+              <img src="/icons/link.svg" className="h-5 w-5 -rotate-6" />
             </div>
-            <p className="  text-justify opacity-60">{api.description}</p>
-          </div>
-          <div className=" w-[30%]  grid grid-rows-2">
-            <div className=" flex flex-col items-center justify-center">
-              <p className=" text-center">{api.category}</p>
-            </div>
-            <div className=" flex flex-row justify-evenly items-center py-4">
-              {(api.key && (
+
+            <div className="grid grid-cols-2">
+              <article className="col-span-1 line-clamp-2">
+                <p className="">{api.description}</p>
+              </article>
+              <aside className="flex flex-row justify-end space-x-4">
+                {/* //TODO:refactor this code cannot change state when logged */}
                 <img
                   src="/icons/key.svg"
-                  title="Api Key Required"
-                  className=" h-6 w-6 rotate-12 cursor-pointer"
-                />
-              )) || <div className="h-6 w-6"></div>}
-              <button onClick={() => navigate("/SignUp")}>
-                <img
-                  src="/icons/comment.svg"
-                  title="Sign Up to view comments"
+                  alt=""
+                  title="Need Api Key"
                   className="h-6 w-6"
                 />
-              </button>
-              <button onClick={() => navigate("/SignUp")}>
+
+                <img
+                  onClick={
+                    isLogin
+                      ? () => dispatch(updateIsCommentSection(api._id))
+                      : () => navigate("/SignUp")
+                  }
+                  src="/icons/comment.svg"
+                  alt=""
+                  title={isLogin ? "Comments" : "Sign Up to Comment"}
+                  className="h-6 w-6 cursor-pointer"
+                />
                 <img
                   src="/icons/heart.svg"
-                  title="Sign Up to view likes"
-                  className=" h-6 w-6"
+                  alt=""
+                  title=""
+                  className="h-6 w-6"
                 />
-              </button>
+              </aside>
             </div>
+            {api.isCommentSection && (
+              <section className="w-100 h-[200px] flex-1 overflow-scroll overflow-x-hidden rounded bg-bgCommentSection p-2">
+                <div className="px flex h-10 w-full flex-row items-center space-x-2 px-4">
+                  <input
+                    type="text"
+                    placeholder="write a comment"
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                    className="h-full w-[92%] rounded bg-bgwhite px-4"
+                  />
+                  <button onClick={() => handleSubmitComment(api._id)}>
+                    <img src="/icons/send.svg" className="h-8 w-8 rotate-45" />
+                  </button>
+                </div>
+                <div className="flex w-full flex-col items-start px-4 pr-16">
+                  <CommentsSection commentId={api._id} />
+                </div>
+              </section>
+            )}
           </div>
-        </div>
+        </article>
       );
     }
   });
