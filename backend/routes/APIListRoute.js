@@ -1,6 +1,9 @@
 const express = require("express");
 const route = express.Router();
 
+//auth middleware
+const verify = require("../middleware/verifyJWT");
+
 const {
   addNewAPI,
   getAPI,
@@ -25,6 +28,6 @@ route.post("/name", getByName);
 route.delete("/:id", deleteAPI);
 
 //UPDATE
-route.patch("/:id", updateAPI);
+route.patch("/:id", verify, updateAPI);
 
 module.exports = route;

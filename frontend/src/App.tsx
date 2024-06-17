@@ -39,12 +39,13 @@ const router = createBrowserRouter([
     ),
   },
 ]);
+
 function App() {
   return (
     <React.StrictMode>
       <Provider store={store}>
         <PersistGate persistor={persistor}>
-          <main className=" h-screen w-screen overflow-hidden">
+          <main className="h-screen w-screen overflow-hidden">
             <Toaster position="top-center" duration={1500} />
             <RouterProvider router={router} />
           </main>

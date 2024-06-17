@@ -18,7 +18,7 @@ route.post("/SignUp", addUser);
 route.post("/Login", loginUser);
 
 //Handle Refresh post
-route.post("/Refresh", handleRefreshToken);
+route.get("/Refresh", handleRefreshToken);
 
 //Logout
 route.post("/Logout", verify, logoutUser);

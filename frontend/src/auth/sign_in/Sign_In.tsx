@@ -23,7 +23,7 @@ function SignIn() {
       const { email, id, accessToken, avatar } = user.data;
       if (!accessToken) return toast.error("Unauthorize User");
 
-      dispatch(login({ email, id, avatar }));
+      dispatch(login({ email, id, avatar, accessToken }));
       console.log(user.data);
       toast.success("Login Successfully");
       navigate("/");

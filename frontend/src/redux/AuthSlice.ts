@@ -5,6 +5,7 @@ export interface UserId {
   isLogin: boolean;
   id: string;
   avatar: number;
+  accessToken: string;
 }
 
 const initialState: UserId = {
@@ -12,6 +13,7 @@ const initialState: UserId = {
   isLogin: false,
   id: "",
   avatar: 0,
+  accessToken: "",
 };
 
 export const UserAuthSlice = createSlice({
@@ -20,12 +22,18 @@ export const UserAuthSlice = createSlice({
   reducers: {
     login: (
       state,
-      action: PayloadAction<{ email: string; id: string; avatar: number }>,
+      action: PayloadAction<{
+        email: string;
+        id: string;
+        avatar: number;
+        accessToken: string;
+      }>,
     ) => {
       state.email = action.payload.email;
       state.isLogin = true;
       state.id = action.payload.id;
       state.avatar = action.payload.avatar;
+      state.accessToken = action.payload.accessToken;
     },
     logout: (state) => {
       state.isLogin = false;
@@ -33,9 +41,13 @@ export const UserAuthSlice = createSlice({
     changeAvatar: (state, action: PayloadAction<number>) => {
       state.avatar = action.payload;
     },
+    updateAccessTokenOnly: (state, action: PayloadAction<string>) => {
+      state.accessToken = action.payload;
+    },
   },
 });
 
-export const { login, logout, changeAvatar } = UserAuthSlice.actions;
+export const { login, logout, changeAvatar, updateAccessTokenOnly } =
+  UserAuthSlice.actions;
 
 export default UserAuthSlice.reducer;

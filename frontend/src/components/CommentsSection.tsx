@@ -42,25 +42,32 @@ function CommentsSection({ commentId }: commentSectionProps) {
 
   return (
     <>
-      {comment.map((comment) => (
-        <div className="w-[50%]rounded-lg mt-2 flex h-[200px] flex-col items-start justify-start py-4">
-          <div className="flex flex-row items-center justify-center">
+      {comment.map((comment, index) => (
+        <section
+          className="mt-4 flex h-full flex-col xs:w-[20%] sm:w-[40%] md:w-[55%] lg:w-[70%]"
+          key={index}
+        >
+          <div className="flex flex-row items-center">
             <img
               src={
-                userAvatar === null ? "/icons/avatar.svg" : Img[userAvatar].img
+                userAvatar === null
+                  ? "/icons/avatar.svg"
+                  : Img[comment.avatar].img
               }
               className="mx-2 max-h-[40px] space-x-2"
             />
-            <div className="flex flex-row items-center space-x-4">
-              <p className="text-sm">{removeEmailSign(comment.email)}</p>
+
+            <div className="flex flex-row items-center space-x-4 text-sm">
+              <p className="flex-grow">{removeEmailSign(comment.email)}</p>
               <p className="text-xs">{comment.timestamp}</p>
             </div>
           </div>
-
-          <div className="h-[150px] max-w-[400px]">
-            <p className="pl-14">{comment.comment}</p>
-          </div>
-        </div>
+          <article className="line-clamp-2 whitespace-normal break-words pl-14 pr-10">
+            <p className="xs:text-xs sm:text-sm md:text-sm lg:text-base">
+              {comment.comment}
+            </p>
+          </article>
+        </section>
       ))}
     </>
   );
