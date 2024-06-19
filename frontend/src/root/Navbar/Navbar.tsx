@@ -32,13 +32,32 @@ function Navbar() {
   const userEmail = useSelector((state: RootState) => state.auth.email);
   const userId = useSelector((state: RootState) => state.auth.id);
   const userAvatar = useSelector((state: RootState) => state.auth.avatar);
+  const userAccessToken = useSelector(
+    (state: RootState) => state.auth.accessToken,
+  );
 
   const [profileAvatar, setProfileAvatar] = useState<number | null>(userAvatar);
   const name = userEmail.split("@");
   const dispatch = useDispatch();
 
-  const onHandleLogout = () => {
+  const onHandleLogout = async () => {
     dispatch(logout(), sessionTimeoutUpdate(true));
+
+    //handle backend logout request
+    try {
+      const res = await axios.get("/Users/Logout", {
+        headers: {
+          Authorization: `Bearer ${userAccessToken}`,
+        },
+        withCredentials: true,
+      });
+
+      if (res.status === 200) {
+        console.log("Logout successfully");
+      }
+    } catch (error) {
+      console.log(error);
+    }
     toast.success("Logout Successfully");
   };
 

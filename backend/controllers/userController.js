@@ -59,7 +59,11 @@ const loginUser = async (req, res) => {
     //generate access token
     const accessToken = generateToken(isUser, process.env.ACCESS_TOKEN, "30s");
     //generate refresh token
-    const refreshToken = generateToken(isUser, process.env.REFRESH_TOKEN, "1d");
+    const refreshToken = generateToken(
+      isUser,
+      process.env.REFRESH_TOKEN,
+      "15h"
+    );
     res.cookie("token", refreshToken, {
       httpOnly: true,
     });

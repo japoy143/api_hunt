@@ -11,8 +11,10 @@ function UserPage() {
 
   const [isDataReady, setIsDataReady] = useState<boolean>(false);
 
+  //15 hour session expire
+  const expireTime = 1000 * 60 * 15; // 5 sec
   //status user
-  useSessionTimeOut(5000);
+  useSessionTimeOut(expireTime);
 
   useEffect(() => {
     const fetchData = async () => {

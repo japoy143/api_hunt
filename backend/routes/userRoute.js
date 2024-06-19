@@ -21,7 +21,7 @@ route.post("/Login", loginUser);
 route.get("/Refresh", handleRefreshToken);
 
 //Logout
-route.post("/Logout", verify, logoutUser);
+route.get("/Logout", verify, logoutUser);
 
 //GET
 route.get("/", verify, getAllUser);
