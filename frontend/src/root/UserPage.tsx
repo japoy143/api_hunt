@@ -4,11 +4,15 @@ import ApiCardsList from "../components/ApiCardsList";
 import MyListLoader from "../components/Loader";
 import Layout from "./Layout";
 import Navbar from "./Navbar/Navbar";
+import useSessionTimeOut from "../components/useSessionTimeOut";
 
 function UserPage() {
   const [searchInput, setSearchInput] = useState<string>("");
 
   const [isDataReady, setIsDataReady] = useState<boolean>(false);
+
+  //status user
+  useSessionTimeOut(5000);
 
   useEffect(() => {
     const fetchData = async () => {

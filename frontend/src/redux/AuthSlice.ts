@@ -6,6 +6,7 @@ export interface UserId {
   id: string;
   avatar: number;
   accessToken: string;
+  isSessionTimeout: boolean;
 }
 
 const initialState: UserId = {
@@ -14,6 +15,7 @@ const initialState: UserId = {
   id: "",
   avatar: 0,
   accessToken: "",
+  isSessionTimeout: false,
 };
 
 export const UserAuthSlice = createSlice({
@@ -44,10 +46,18 @@ export const UserAuthSlice = createSlice({
     updateAccessTokenOnly: (state, action: PayloadAction<string>) => {
       state.accessToken = action.payload;
     },
+    sessionTimeoutUpdate: (state, action: PayloadAction<boolean>) => {
+      state.isSessionTimeout = action.payload;
+    },
   },
 });
 
-export const { login, logout, changeAvatar, updateAccessTokenOnly } =
-  UserAuthSlice.actions;
+export const {
+  login,
+  logout,
+  changeAvatar,
+  updateAccessTokenOnly,
+  sessionTimeoutUpdate,
+} = UserAuthSlice.actions;
 
 export default UserAuthSlice.reducer;

@@ -24,6 +24,7 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
   const userAvatar = useSelector((state: RootState) => state.auth.avatar);
   const userEmail = useSelector((state: RootState) => state.auth.email);
   const userId = useSelector((state: RootState) => state.auth.id);
+
   const userAccessToken = useSelector(
     (state: RootState) => state.auth.accessToken,
   );

@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/AuthSlice";
 import { toast } from "sonner";
+// import { RootState } from "../../redux/store";
 
 function SignIn() {
   const navigate = useNavigate();
@@ -11,7 +12,22 @@ function SignIn() {
   const [Password, setPassword] = useState<string>("");
   const dispatch = useDispatch();
 
+  //for passing tokens if the credential is not true it cannot pass cookies
   axios.defaults.withCredentials = true;
+
+  // //sessionId
+  // const sessionId = useSelector(
+  //   (state: RootState) => state.auth.isSessionTimeout,
+  // );
+
+  // //autoLogout
+  // const autoLogout = () => {
+  //   const clearOutLogoutTimeoutId = setTimeout(() => {
+  //     dispatch(logout());
+  //     toast.error("Session Expired");
+  //   }, 10000);
+  //   sessionId && clearTimeout(clearOutLogoutTimeoutId);
+  // };
 
   const Login = async (Email: string, Password: string) => {
     const user = await axios.post("http://localhost:3000/Users/Login", {
@@ -22,13 +38,21 @@ function SignIn() {
     if (user.data.Message === "Success") {
       const { email, id, accessToken, avatar } = user.data;
       if (!accessToken) return toast.error("Unauthorize User");
-
-      dispatch(login({ email, id, avatar, accessToken }));
+      //passing user details to the global state
+      dispatch(
+        login({
+          email,
+          id,
+          avatar,
+          accessToken,
+        }),
+      );
       console.log(user.data);
       toast.success("Login Successfully");
       navigate("/");
+      // autoLogout();
     }
-
+    //handling errors
     if (user.data === "Incorrect Password") {
       console.log("Error", user.data);
       toast.warning("Incorrect Password");

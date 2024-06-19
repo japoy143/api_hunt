@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../redux/store";
-import { logout } from "../../redux/AuthSlice";
+import { logout, sessionTimeoutUpdate } from "../../redux/AuthSlice";
 import { toast } from "sonner";
 import { useState } from "react";
 import ChangeAvatar from "../../components/ChangeAvatar";
@@ -38,7 +38,7 @@ function Navbar() {
   const dispatch = useDispatch();
 
   const onHandleLogout = () => {
-    dispatch(logout());
+    dispatch(logout(), sessionTimeoutUpdate(true));
     toast.success("Logout Successfully");
   };
 

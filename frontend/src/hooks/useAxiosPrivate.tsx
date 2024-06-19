@@ -43,6 +43,4 @@ const useAxiosPrivate = () => {
   return axiosPrivate;
 };
 
-//32 mins
-
 export default useAxiosPrivate;
