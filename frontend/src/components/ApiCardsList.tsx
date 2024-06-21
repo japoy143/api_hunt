@@ -6,6 +6,8 @@ import { updateIsCommentSection, postComment } from "../redux/APISlice";
 import CommentsSection from "./CommentsSection";
 import { toast } from "sonner";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import { updateLikeOnly } from "../redux/AuthSlice";
+import HeartSvg from "../assets/heartSvg";
 
 type ApiCardsListProps = {
   searchInput: string;
@@ -14,6 +16,7 @@ type ApiCardsListProps = {
 function ApiCardsList({ searchInput }: ApiCardsListProps) {
   const navigate = useNavigate();
 
+  //handling refresh token and generating new accessToken
   const axiosPrivate = useAxiosPrivate();
 
   //api list
@@ -24,10 +27,13 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
   const userAvatar = useSelector((state: RootState) => state.auth.avatar);
   const userEmail = useSelector((state: RootState) => state.auth.email);
   const userId = useSelector((state: RootState) => state.auth.id);
-
   const userAccessToken = useSelector(
     (state: RootState) => state.auth.accessToken,
   );
+
+  //filter comment to distinct so that it will not have duplicates
+  const userLikes = useSelector((state: RootState) => state.auth.likes);
+  const removeDuplicateLikes = new Set([...userLikes]);
 
   //date today
   const timeToday = new Date();
@@ -38,8 +44,8 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
   //controller
   const dispatch = useDispatch();
 
-  //submit
-  const handleSubmitComment = async (id: string) => {
+  //submit comment
+  const handleSubmitComment = (id: string) => {
     const commentData = {
       email: userEmail,
       userId: userId,
@@ -47,39 +53,67 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
       comment: comment,
       timestamp: timeToday.toLocaleTimeString(),
     };
+
+    const previousComments = data
+      .filter((api) => api._id === id)
+      .map((api) => api.comments)
+      .flat();
+
+    axiosPrivate
+      .patch(
+        `APIs/${id}`,
+        {
+          comments: [commentData, ...previousComments],
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${userAccessToken}`,
+          },
+        },
+      )
+      .then((res) => console.log("comment posted", res))
+      .catch((err) => {
+        console.error("comment post failed", err);
+        toast.error("Comment Failed ");
+      });
+
+    //client side update
     dispatch(
       postComment({
         id: id,
         comment: commentData,
       }),
     );
-
+    //clean up
     setComment("");
+  };
 
-    const previousComments = data
-      .filter((api) => api._id === id)
-      .map((api) => api.comments)
-      .flat();
-    const res = await axiosPrivate.patch(
-      `APIs/${id}`,
-      {
-        comments: [commentData, ...previousComments],
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${userAccessToken}`,
-        },
-      },
-    );
+  //like api synchronously
+  const handleLike = (apiId: string) => {
+    //find if already exist
+    const liked = userLikes.includes(apiId);
+    //remove sameId
+    const unlike = userLikes.filter((like) => like !== apiId);
+    //if like already then unlike
+    const method = liked ? [...unlike] : [...removeDuplicateLikes, apiId];
 
-    console.log(userAccessToken);
+    axiosPrivate
+      .patch(`/Users/${userId}`, { likes: [...method] })
+      .then((res) => {
+        console.log("Comment like", res);
+      })
+      .catch((err) => {
+        console.error(err);
+        dispatch(updateLikeOnly([...unlike]));
+      });
 
-    if (res.status === 400) {
-      toast.error("Authorization needed");
-    }
-    if (res.status === 200) {
-      console.log("Comments Updated");
-    }
+    dispatch(updateLikeOnly([...method]));
+  };
+
+  //if liked
+  const showLikes = (id: string) => {
+    const found = userLikes.includes(id);
+    return found ? "black" : "none";
   };
 
   return data.map((api, i) => {
@@ -112,12 +146,14 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
                 <p className="">{api.description}</p>
               </article>
               <aside className="flex flex-row justify-end space-x-4">
-                <img
-                  src="/icons/key.svg"
-                  alt=""
-                  title="Need Api Key"
-                  className="h-6 w-6"
-                />
+                {api.key && (
+                  <img
+                    src="/icons/key.svg"
+                    alt=""
+                    title="Need Api Key"
+                    className="h-6 w-6"
+                  />
+                )}
 
                 <img
                   onClick={
@@ -130,12 +166,9 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
                   title={isLogin ? "Comments" : "Sign Up to Comment"}
                   className="h-6 w-6 cursor-pointer"
                 />
-                <img
-                  src="/icons/heart.svg"
-                  alt=""
-                  title=""
-                  className="h-6 w-6"
-                />
+                <button onClick={() => handleLike(api._id)} className="h-6 w-6">
+                  <HeartSvg className="h-6 w-6" color={showLikes(api._id)} />
+                </button>
               </aside>
             </div>
             {api.isCommentSection && (

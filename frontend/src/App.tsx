@@ -1,6 +1,5 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Homepage from "./root/Homepage";
 import { Toaster } from "sonner";
 import SignIn from "./auth/sign_in/Sign_In";
 import SignUp from "./auth/sign_up/Sign_Up";
@@ -10,6 +9,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import UserPage from "./root/UserPage";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
+import LandingPage from "./root/LandingPage";
 
 const persistor = persistStore(store);
 
@@ -18,7 +18,7 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <ProtectedRoute>
-        <Homepage />
+        <LandingPage />
       </ProtectedRoute>
     ),
   },

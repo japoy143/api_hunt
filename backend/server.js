@@ -15,7 +15,7 @@ const MONGO_URI = process.env.MONGO_URI;
 //fix cookie
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:3001"],
     methods: ["GET", "POST", "PATCH"],
     credentials: true,
   })

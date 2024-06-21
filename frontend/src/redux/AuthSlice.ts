@@ -7,6 +7,7 @@ export interface UserId {
   avatar: number;
   accessToken: string;
   isSessionTimeout: boolean;
+  likes: string[];
 }
 
 const initialState: UserId = {
@@ -16,6 +17,7 @@ const initialState: UserId = {
   avatar: 0,
   accessToken: "",
   isSessionTimeout: false,
+  likes: [],
 };
 
 export const UserAuthSlice = createSlice({
@@ -29,6 +31,7 @@ export const UserAuthSlice = createSlice({
         id: string;
         avatar: number;
         accessToken: string;
+        likes: string[];
       }>,
     ) => {
       state.email = action.payload.email;
@@ -36,12 +39,16 @@ export const UserAuthSlice = createSlice({
       state.id = action.payload.id;
       state.avatar = action.payload.avatar;
       state.accessToken = action.payload.accessToken;
+      state.likes = action.payload.likes;
     },
     logout: (state) => {
       state.isLogin = false;
     },
     changeAvatar: (state, action: PayloadAction<number>) => {
       state.avatar = action.payload;
+    },
+    updateLikeOnly: (state, action: PayloadAction<string[]>) => {
+      state.likes = action.payload;
     },
     updateAccessTokenOnly: (state, action: PayloadAction<string>) => {
       state.accessToken = action.payload;
@@ -58,6 +65,7 @@ export const {
   changeAvatar,
   updateAccessTokenOnly,
   sessionTimeoutUpdate,
+  updateLikeOnly,
 } = UserAuthSlice.actions;
 
 export default UserAuthSlice.reducer;

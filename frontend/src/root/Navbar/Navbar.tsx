@@ -8,6 +8,7 @@ import ChangeAvatar from "../../components/ChangeAvatar";
 import Menu from "../../components/Menu";
 import { avatarType } from "../../types";
 import axios from "../../api/axios";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 //Update url
 const Update_Url = "/Users/";
@@ -21,6 +22,9 @@ const Img: avatarType[] = [
   { img: "/avatar/avatar_girl3.svg" },
 ];
 function Navbar() {
+  //generate new accessToken
+  const axiosPrivate = useAxiosPrivate();
+
   const navigate = useNavigate();
 
   //button states
@@ -45,7 +49,7 @@ function Navbar() {
 
     //handle backend logout request
     try {
-      const res = await axios.get("/Users/Logout", {
+      const res = await axiosPrivate.get("/Users/Logout", {
         headers: {
           Authorization: `Bearer ${userAccessToken}`,
         },
@@ -129,13 +133,7 @@ function Navbar() {
             Logout
           </button>
         ) : (
-          <div className="space-x-2">
-            <button
-              className="h-8 w-20 cursor-pointer rounded bg-buttonColor font-poppins text-white"
-              onClick={() => navigate("/SignUp")}
-            >
-              SignUp
-            </button>
+          <div className="flex w-44 flex-row justify-end space-x-2">
             <button
               className="h-8 w-20 cursor-pointer rounded bg-buttonColor font-poppins text-white"
               onClick={() => navigate("/LogIn")}

@@ -73,6 +73,7 @@ const loginUser = async (req, res) => {
       id: isUser._id,
       email: email,
       avatar: isUser.avatar,
+      likes: isUser.likes,
       accessToken,
     });
   } else {
