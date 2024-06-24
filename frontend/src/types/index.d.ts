@@ -25,7 +25,8 @@ export type APIType = {
   key: boolean;
   comments: commentType[];
   isCommentSection: boolean;
-  likes: number;
+  likes: likedType[];
+  isLikeHover: boolean;
 };
 
 //islogin or User Status
@@ -33,11 +34,18 @@ export type UserStatus = {
   id: number;
 };
 
-//comment section typo
+//comment section type
 export type commentType = {
-  avatar: 0;
+  avatar: number;
   comment: string;
   timestamp: string;
+};
+
+//users liked
+export type likedType = {
+  avatar: number;
+  userId: string;
+  email: string;
 };
 
 //avatar type

@@ -12,6 +12,7 @@ const addNewAPI = async (req, res) => {
     likes,
     isCommentSection,
     comments,
+    isLikeHover,
   } = req.body;
   try {
     const newAPI = await api_list.create({
@@ -23,6 +24,7 @@ const addNewAPI = async (req, res) => {
       likes: likes,
       isCommentSection: isCommentSection,
       comments: comments,
+      isLikeHover: isLikeHover,
     });
     return res
       .status(200)

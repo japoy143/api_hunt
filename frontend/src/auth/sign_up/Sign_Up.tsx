@@ -43,7 +43,7 @@ function SignUp() {
         password,
         isLogin: false,
       });
-      console.log(response.data);
+      console.log(response.data.newUser.email);
       toast.success("Sign Up Successfully");
       navigation("/Login");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

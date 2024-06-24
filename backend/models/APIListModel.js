@@ -25,7 +25,7 @@ const APIs = new Schema(
       required: true,
     },
     likes: {
-      type: Number,
+      type: [],
       required: true,
     },
     comments: {
@@ -33,6 +33,10 @@ const APIs = new Schema(
       required: true,
     },
     isCommentSection: {
+      type: Boolean,
+      required: true,
+    },
+    isLikeHover: {
       type: Boolean,
       required: true,
     },

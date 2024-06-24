@@ -57,7 +57,7 @@ function CommentsSection({ commentId }: commentSectionProps) {
               className="mx-2 max-h-[40px] space-x-2"
             />
 
-            <div className="flex flex-row items-center space-x-4 text-sm">
+            <div className="text-RED flex flex-row items-center space-x-4">
               <p className="flex-grow">{removeEmailSign(comment.email)}</p>
               <p className="text-xs">{comment.timestamp}</p>
             </div>

@@ -2,12 +2,20 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { updateIsCommentSection, postComment } from "../redux/APISlice";
+import {
+  updateIsCommentSection,
+  postComment,
+  updateLikedAPIOnly,
+  removeLikedAPIOnly,
+  updateShowLikedUsers,
+} from "../redux/APISlice";
 import CommentsSection from "./CommentsSection";
 import { toast } from "sonner";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { updateLikeOnly } from "../redux/AuthSlice";
 import HeartSvg from "../assets/heartSvg";
+import { likedType } from "../types";
+import UsersLiked from "./UsersLiked";
 
 type ApiCardsListProps = {
   searchInput: string;
@@ -16,8 +24,13 @@ type ApiCardsListProps = {
 function ApiCardsList({ searchInput }: ApiCardsListProps) {
   const navigate = useNavigate();
 
+  //TODO:Refactor this tomorrow before pushing
+
   //handling refresh token and generating new accessToken
   const axiosPrivate = useAxiosPrivate();
+
+  //controller
+  const dispatch = useDispatch();
 
   //api list
   const data = useSelector((state: RootState) => state.api.data);
@@ -41,8 +54,15 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
   // comment value
   const [comment, setComment] = useState<string>("");
 
-  //controller
-  const dispatch = useDispatch();
+  //get previous comments
+  const getPreviousComment = (id: string) => {
+    const previousComments = data
+      .filter((api) => api._id === id)
+      .map((api) => api.comments)
+      .flat();
+
+    return previousComments;
+  };
 
   //submit comment
   const handleSubmitComment = (id: string) => {
@@ -54,10 +74,8 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
       timestamp: timeToday.toLocaleTimeString(),
     };
 
-    const previousComments = data
-      .filter((api) => api._id === id)
-      .map((api) => api.comments)
-      .flat();
+    //prev comment
+    const previousComments = getPreviousComment(id);
 
     axiosPrivate
       .patch(
@@ -88,19 +106,61 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
     setComment("");
   };
 
-  //like api synchronously
-  const handleLike = (apiId: string) => {
+  const APICollectionLike = (apiId: string) => {
+    const usersLiked: likedType = {
+      avatar: userAvatar,
+      email: userEmail,
+      userId: userId,
+    };
+
+    //get previous user likes
+    const apiLiked = data
+      .filter((api) => api._id === apiId)
+      .map((liked) => liked.likes)
+      .flat();
+    //is user already in list
+    const isApiLiked = apiLiked.some((item) => item.userId === userId);
+    //unlike
+    const userUnLiked = apiLiked.filter((liked) => liked.userId !== userId);
+    const likesMethod = isApiLiked
+      ? [...userUnLiked]
+      : [usersLiked, ...apiLiked];
+
+    const clientSideMethod = isApiLiked
+      ? removeLikedAPIOnly({ id: apiId, userId: userId })
+      : updateLikedAPIOnly({
+          id: apiId,
+          liked: usersLiked,
+        });
+
+    axiosPrivate
+      .patch(`/APIs/${apiId}`, {
+        likes: [...likesMethod],
+      })
+      .then(() => {
+        console.log("API like collection added");
+      })
+      .catch((err) => {
+        console.error(err);
+        dispatch(removeLikedAPIOnly({ id: apiId, userId: userId }));
+      });
+    dispatch(clientSideMethod);
+  };
+
+  const UserCollectionLike = (apiId: string) => {
     //find if already exist
     const liked = userLikes.includes(apiId);
     //remove sameId
     const unlike = userLikes.filter((like) => like !== apiId);
     //if like already then unlike
-    const method = liked ? [...unlike] : [...removeDuplicateLikes, apiId];
+    const method = liked ? [...unlike] : [apiId, ...removeDuplicateLikes];
 
     axiosPrivate
-      .patch(`/Users/${userId}`, { likes: [...method] })
-      .then((res) => {
-        console.log("Comment like", res);
+      .patch(`/Users/${userId}`, {
+        likes: [...method],
+      })
+      .then(() => {
+        console.log("Users like collection added");
       })
       .catch((err) => {
         console.error(err);
@@ -110,10 +170,24 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
     dispatch(updateLikeOnly([...method]));
   };
 
+  const handleLike = (apiId: string) => {
+    APICollectionLike(apiId);
+    UserCollectionLike(apiId);
+  };
+
   //if liked
   const showLikes = (id: string) => {
     const found = userLikes.includes(id);
     return found ? "black" : "none";
+  };
+
+  //hover users liked
+  const onHoverLikes = (id: string) => {
+    dispatch(updateShowLikedUsers(id));
+  };
+
+  const unHoverLikes = (id: string) => {
+    dispatch(updateShowLikedUsers(id));
   };
 
   return data.map((api, i) => {
@@ -155,20 +229,40 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
                   />
                 )}
 
-                <img
-                  onClick={
-                    isLogin
-                      ? () => dispatch(updateIsCommentSection(api._id))
-                      : () => navigate("/SignUp")
-                  }
-                  src="/icons/comment.svg"
-                  alt=""
-                  title={isLogin ? "Comments" : "Sign Up to Comment"}
-                  className="h-6 w-6 cursor-pointer"
-                />
-                <button onClick={() => handleLike(api._id)} className="h-6 w-6">
-                  <HeartSvg className="h-6 w-6" color={showLikes(api._id)} />
-                </button>
+                <div className="flex flex-row justify-center space-x-2">
+                  <img
+                    onClick={
+                      isLogin
+                        ? () => dispatch(updateIsCommentSection(api._id))
+                        : () => navigate("/SignUp")
+                    }
+                    src="/icons/comment.svg"
+                    alt=""
+                    title={isLogin ? "Comments" : "Sign Up to Comment"}
+                    className="h-6 w-6 cursor-pointer"
+                  />
+                  <p>{api.comments.length}</p>
+                </div>
+
+                <div
+                  className="relative flex flex-row justify-center space-x-2"
+                  onMouseEnter={() => onHoverLikes(api._id)}
+                  onMouseLeave={() => unHoverLikes(api._id)}
+                >
+                  <button
+                    onClick={() => handleLike(api._id)}
+                    className="h-6 w-6"
+                  >
+                    <HeartSvg className="h-6 w-6" color={showLikes(api._id)} />
+                  </button>
+                  <p>{api.likes.length}</p>
+
+                  {api.isLikeHover && (
+                    <div className="absolute right-0.5 top-8 h-24 w-40 overflow-y-auto overflow-x-hidden rounded bg-white p-4">
+                      <UsersLiked Id={api._id} />
+                    </div>
+                  )}
+                </div>
               </aside>
             </div>
             {api.isCommentSection && (

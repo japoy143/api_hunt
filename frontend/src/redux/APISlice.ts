@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { APIType, commentType } from "../types";
+import { APIType, commentType, likedType } from "../types";
 
 export interface APIData {
   data: APIType[];
@@ -34,8 +34,49 @@ export const APISlice = createSlice({
           : api,
       );
     },
+    updateLikedAPIOnly: (
+      state,
+      action: PayloadAction<{ id: string; liked: likedType }>,
+    ) => {
+      state.data = state.data.map((api) =>
+        api._id === action.payload.id
+          ? { ...api, likes: [action.payload.liked, ...api.likes] }
+          : api,
+      );
+    },
+
+    removeLikedAPIOnly: (
+      state,
+      action: PayloadAction<{ id: string; userId: string }>,
+    ) => {
+      state.data = state.data.map((api) =>
+        api._id === action.payload.id
+          ? {
+              ...api,
+              likes: api.likes.filter(
+                (liked) => liked.userId !== action.payload.userId,
+              ),
+            }
+          : api,
+      );
+    },
+
+    updateShowLikedUsers: (state, action: PayloadAction<string>) => {
+      state.data = state.data.map((api) =>
+        api._id === action.payload
+          ? { ...api, isLikeHover: !api.isLikeHover }
+          : api,
+      );
+    },
   },
 });
 
-export const { setAPI, updateIsCommentSection, postComment } = APISlice.actions;
+export const {
+  setAPI,
+  updateIsCommentSection,
+  postComment,
+  updateLikedAPIOnly,
+  removeLikedAPIOnly,
+  updateShowLikedUsers,
+} = APISlice.actions;
 export default APISlice.reducer;

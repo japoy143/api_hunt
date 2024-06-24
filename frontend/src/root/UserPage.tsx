@@ -5,6 +5,8 @@ import MyListLoader from "../components/Loader";
 import Layout from "./Layout";
 import Navbar from "./Navbar/Navbar";
 import useSessionTimeOut from "../components/useSessionTimeOut";
+import { useDispatch } from "react-redux";
+import { setAPI } from "../redux/APISlice";
 
 function UserPage() {
   const [searchInput, setSearchInput] = useState<string>("");
@@ -16,18 +18,21 @@ function UserPage() {
   //status user
   useSessionTimeOut(expireTime);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     const fetchData = async () => {
       const res = await axios.get("http://localhost:3000/APIs/");
 
       if (res.status === 200) {
+        dispatch(setAPI(res.data));
         setIsDataReady(true);
       } else {
         console.error(res.status);
       }
     };
     fetchData();
-  }, []);
+  }, [dispatch]);
   return (
     <Layout>
       <Navbar />
@@ -37,7 +42,7 @@ function UserPage() {
         </h1>
         <br />
         <p className="text-center font-poppins text-lg">
-          Find the exact API’s for your next project to Unlock the potential of
+          Find the exact API's for your next project to Unlock the potential of
           your next project
         </p>
         <br />
