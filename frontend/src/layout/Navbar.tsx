@@ -1,14 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { RootState } from "../../redux/store";
-import { logout, sessionTimeoutUpdate } from "../../redux/AuthSlice";
+import { RootState } from "../redux/store";
+import { logout, sessionTimeoutUpdate } from "../redux/AuthSlice";
 import { toast } from "sonner";
 import { useState } from "react";
-import ChangeAvatar from "../../components/ChangeAvatar";
-import Menu from "../../components/Menu";
-import { avatarType } from "../../types";
-import axios from "../../api/axios";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import ChangeAvatar from "../components/ChangeAvatar";
+import Menu from "../components/Menu";
+import { avatarType } from "../types";
+import axios from "../api/axios";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 //Update url
 const Update_Url = "/Users/";

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import axios from "../../api/axios";
+import axios from "../api/axios";
 
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,24}$/;
 const Register_Url = "/Users/SignUp";

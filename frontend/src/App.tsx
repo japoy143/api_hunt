@@ -1,15 +1,15 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Toaster } from "sonner";
-import SignIn from "./auth/sign_in/Sign_In";
-import SignUp from "./auth/sign_up/Sign_Up";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
-import ProtectedRoute from "./components/ProtectedRoute";
-import UserPage from "./root/UserPage";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
-import LandingPage from "./root/LandingPage";
+import LandingPage from "./pages/LandingPage";
+import ProtectedRoute from "./components/ProtectedRoute";
+import UserPage from "./pages/UserPage";
+import SignIn from "./pages/SignInPage";
+import SignUp from "./pages/SignUp_Page";
+import { Toaster } from "sonner";
 
 const persistor = persistStore(store);
 

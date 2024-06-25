@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import {
   updateIsCommentSection,
   postComment,
@@ -9,13 +10,11 @@ import {
   removeLikedAPIOnly,
   updateShowLikedUsers,
 } from "../redux/APISlice";
-import CommentsSection from "./CommentsSection";
-import { toast } from "sonner";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { updateLikeOnly } from "../redux/AuthSlice";
-import HeartSvg from "../assets/heartSvg";
+import { CommentsSection, UsersLiked } from "./exports";
 import { likedType } from "../types";
-import UsersLiked from "./UsersLiked";
+import { toast } from "sonner";
+import HeartSvg from "../assets/heartSvg";
 
 type ApiCardsListProps = {
   searchInput: string;
@@ -24,7 +23,8 @@ type ApiCardsListProps = {
 function ApiCardsList({ searchInput }: ApiCardsListProps) {
   const navigate = useNavigate();
 
-  //TODO:Refactor this tomorrow before pushing
+  // comment value
+  const [comment, setComment] = useState<string>("");
 
   //handling refresh token and generating new accessToken
   const axiosPrivate = useAxiosPrivate();
@@ -35,6 +35,9 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
   //api list
   const data = useSelector((state: RootState) => state.api.data);
 
+  //date today
+  const timeToday = new Date();
+
   //user Details
   const isLogin = useSelector((state: RootState) => state.auth.isLogin);
   const userAvatar = useSelector((state: RootState) => state.auth.avatar);
@@ -44,15 +47,12 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
     (state: RootState) => state.auth.accessToken,
   );
 
+
+  // functions
+
   //filter comment to distinct so that it will not have duplicates
   const userLikes = useSelector((state: RootState) => state.auth.likes);
   const removeDuplicateLikes = new Set([...userLikes]);
-
-  //date today
-  const timeToday = new Date();
-
-  // comment value
-  const [comment, setComment] = useState<string>("");
 
   //get previous comments
   const getPreviousComment = (id: string) => {
@@ -106,6 +106,8 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
     setComment("");
   };
 
+
+  //API side update
   const APICollectionLike = (apiId: string) => {
     const usersLiked: likedType = {
       avatar: userAvatar,
@@ -147,6 +149,7 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
     dispatch(clientSideMethod);
   };
 
+  // user side collection update
   const UserCollectionLike = (apiId: string) => {
     //find if already exist
     const liked = userLikes.includes(apiId);

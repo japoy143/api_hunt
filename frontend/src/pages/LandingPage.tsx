@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import Layout from "./Layout";
-import Navbar from "./Navbar/Navbar";
+import Layout from "../layout/Layout";
+import Navbar from "../layout/Navbar";
 
 function LandingPage() {
   const navigate = useNavigate();

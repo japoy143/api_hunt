@@ -3,6 +3,7 @@ require("dotenv").config();
 require("colors");
 const mongoose = require("mongoose");
 const cors = require("cors");
+
 //cookie parser
 const cookiePaser = require("cookie-parser");
 
@@ -20,6 +21,7 @@ app.use(
     credentials: true,
   })
 );
+
 app.use(express.json());
 app.use(cookiePaser());
 // show all the method

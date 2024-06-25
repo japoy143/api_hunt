@@ -1,12 +1,11 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
-import ApiCardsList from "../components/ApiCardsList";
-import MyListLoader from "../components/Loader";
-import Layout from "./Layout";
-import Navbar from "./Navbar/Navbar";
-import useSessionTimeOut from "../components/useSessionTimeOut";
+import useSessionTimeOut from "../hooks/useSessionTimeOut";
 import { useDispatch } from "react-redux";
 import { setAPI } from "../redux/APISlice";
+import { ApiCardsList, MyListLoader } from "../components/exports";
+import Layout from "../layout/Layout";
+import Navbar from "../layout/Navbar";
+import axios from "axios";
 
 function UserPage() {
   const [searchInput, setSearchInput] = useState<string>("");
@@ -14,7 +13,8 @@ function UserPage() {
   const [isDataReady, setIsDataReady] = useState<boolean>(false);
 
   //15 hour session expire
-  const expireTime = 1000 * 60 * 15; // 5 sec
+  const expireTime = 1000 * 60 * 15;
+
   //status user
   useSessionTimeOut(expireTime);
 

@@ -24,6 +24,7 @@ route.get("/:id", getAPI);
 
 //GETBYNAME
 route.post("/name", getByName);
+
 //DELETE
 route.delete("/:id", deleteAPI);
 

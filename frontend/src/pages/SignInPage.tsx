@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { login } from "../../redux/AuthSlice";
+import { login } from "../redux/AuthSlice";
 import { toast } from "sonner";
 
 function SignIn() {
