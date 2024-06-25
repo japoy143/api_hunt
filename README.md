@@ -57,7 +57,7 @@ link1: https://www.youtube.com/watch?v=pILdgCr4w3s
 link2: https://www.youtube.com/watch?v=0Pt7Kfh78Jg&t=564s
 ## Tech Stack
 
-**Client:** React, Redux, TailwindCSS
+**Client:** Typescript, React, Redux, TailwindCSS
 
 **Server:** Node, Express, MongoDB
 
