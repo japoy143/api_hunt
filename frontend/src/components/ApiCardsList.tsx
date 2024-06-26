@@ -200,7 +200,7 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
   }, [data]);
 
   console.log(typeof partialData);
-  
+
   return partialData.map((api, i) => {
     if (
       api.category.toLowerCase().includes(searchInput.toLowerCase()) ||
@@ -256,7 +256,7 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
                 </div>
 
                 <div
-                  className="relative flex flex-row justify-center space-x-2"
+                  className="relative flex flex-row justify-center space-x-2 bg-none"
                   onMouseEnter={() => onHoverLikes(api._id)}
                   onMouseLeave={() => unHoverLikes(api._id)}
                 >

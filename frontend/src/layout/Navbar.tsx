@@ -133,7 +133,7 @@ function Navbar() {
             Logout
           </button>
         ) : (
-          <div className="flex w-44 flex-row justify-end space-x-2">
+          <div className="flex w-44 flex-row justify-end space-x-2 bg-none">
             <button
               className="h-8 w-20 cursor-pointer rounded bg-buttonColor font-poppins text-white"
               onClick={() => navigate("/LogIn")}
@@ -145,7 +145,7 @@ function Navbar() {
       </div>
       <div className={`relative sm:hidden md:hidden lg:hidden`}>
         {user ? (
-          <div className="flex w-20 flex-row justify-center">
+          <div className="flex w-20 flex-row justify-center bg-none">
             <button onClick={onHandleLogout}>
               <img src="/icons/logout.svg" className="h-6 w-6 ease-out" />
             </button>
