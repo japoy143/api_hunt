@@ -10,9 +10,6 @@ import UserPage from "./pages/UserPage";
 import SignIn from "./pages/SignInPage";
 import SignUp from "./pages/SignUp_Page";
 import { Toaster } from "sonner";
-import { disableReactDevTools } from "@fvilers/disable-react-devtools";
-
-if (process.env.STATUS === "production") disableReactDevTools();
 
 const persistor = persistStore(store);
 

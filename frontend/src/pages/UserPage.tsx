@@ -26,6 +26,7 @@ function UserPage() {
 
       if (res.status === 200) {
         dispatch(setAPI(res.data));
+        console.log(res.data);
         setIsDataReady(true);
       } else {
         console.error(res.status);

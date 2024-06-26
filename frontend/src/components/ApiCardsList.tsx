@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
@@ -12,7 +12,7 @@ import {
 } from "../redux/APISlice";
 import { updateLikeOnly } from "../redux/AuthSlice";
 import { CommentsSection, UsersLiked } from "./exports";
-import { likedType } from "../types";
+import { APIType, likedType } from "../types";
 import { toast } from "sonner";
 import HeartSvg from "../assets/heartSvg";
 
@@ -46,7 +46,6 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
   const userAccessToken = useSelector(
     (state: RootState) => state.auth.accessToken,
   );
-
 
   // functions
 
@@ -105,7 +104,6 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
     //clean up
     setComment("");
   };
-
 
   //API side update
   const APICollectionLike = (apiId: string) => {
@@ -193,7 +191,17 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
     dispatch(updateShowLikedUsers(id));
   };
 
-  return data.map((api, i) => {
+  const [partialData, setPartialData] = useState<APIType[]>([]);
+
+  useEffect(() => {
+    if (data) {
+      setPartialData(data);
+    }
+  }, [data]);
+
+  console.log(typeof partialData);
+  
+  return partialData.map((api, i) => {
     if (
       api.category.toLowerCase().includes(searchInput.toLowerCase()) ||
       api.name.toLocaleLowerCase().includes(searchInput.toLocaleLowerCase())
