@@ -47,7 +47,6 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
     (state: RootState) => state.auth.accessToken,
   );
 
-
   // functions
 
   //filter comment to distinct so that it will not have duplicates
@@ -105,7 +104,6 @@ function ApiCardsList({ searchInput }: ApiCardsListProps) {
     //clean up
     setComment("");
   };
-
 
   //API side update
   const APICollectionLike = (apiId: string) => {

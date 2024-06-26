@@ -19,7 +19,7 @@ const MONGO_URI = process.env.MONGO_URI;
 //fix cookie
 app.use(
   cors({
-    origin: ["http://localhost:3001"],
+    origin: ["https://api-hunt.onrender.com"],
     methods: ["GET", "POST", "PATCH"],
     credentials: true,
   })
