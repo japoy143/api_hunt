@@ -37,7 +37,7 @@ function UserPage() {
   return (
     <Layout>
       <Navbar />
-      <main className="w-screen p-20">
+      <main className="mx-auto h-screen w-screen xs:px-4 sm:px-6 md:px-8 lg:px-20">
         <h1 className="text-center font-poppins text-4xl font-medium">
           Explore API's
         </h1>
@@ -61,7 +61,7 @@ function UserPage() {
         </div>
         <br />
 
-        <div className="h-[700px] overflow-scroll">
+        <div className="h-full flex-1 overflow-scroll">
           {(isDataReady && <ApiCardsList searchInput={searchInput} />) || (
             <div className="flex flex-col items-center justify-center">
               <MyListLoader />
