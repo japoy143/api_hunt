@@ -11,10 +11,10 @@ const useSessionTimeOut = (milliseconds: number) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    let sessionId: number;
+    let sessionId: number | null;
 
     if (!isSession) {
-      sessionId = setTimeout(() => {
+      sessionId = window.setTimeout(() => {
         dispatch(logout());
         toast.error("Session Expired");
         console.log("Refresh Token Expired");
@@ -22,7 +22,9 @@ const useSessionTimeOut = (milliseconds: number) => {
     }
 
     return () => {
-      clearTimeout(sessionId);
+      if (sessionId !== null) {
+        window.clearTimeout(sessionId);
+      }
     };
   }, [dispatch, isSession, milliseconds]);
 };
