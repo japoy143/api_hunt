@@ -4,6 +4,9 @@ require("colors");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
+//path for directory
+const path = require("path");
+
 //cookie parser
 const cookiePaser = require("cookie-parser");
 
@@ -30,6 +33,9 @@ app.use((req, res, next) => {
   next();
 });
 
+// use the client by path
+app.use(express.static(path.join(__dirname, "client", "dist")));
+
 mongoose
   .connect(MONGO_URI)
   .then(() => {
@@ -45,3 +51,8 @@ const UserRoute = require("./routes/userRoute");
 app.use("/APIs", APIRoute);
 
 app.use("/Users", UserRoute);
+
+// render client for any path
+app.get("*", (req, res) =>
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"))
+);
