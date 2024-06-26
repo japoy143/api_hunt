@@ -5,7 +5,7 @@ import { setAPI } from "../redux/APISlice";
 import { ApiCardsList, MyListLoader } from "../components/exports";
 import Layout from "../layout/Layout";
 import Navbar from "../layout/Navbar";
-import axios from "axios";
+import axios from "../api/axios";
 
 function UserPage() {
   const [searchInput, setSearchInput] = useState<string>("");
@@ -22,7 +22,7 @@ function UserPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await axios.get("http://localhost:3000/APIs/");
+      const res = await axios.get("/APIs/");
 
       if (res.status === 200) {
         dispatch(setAPI(res.data));

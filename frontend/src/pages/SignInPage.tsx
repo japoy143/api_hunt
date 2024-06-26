@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import axios from "../api/axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/AuthSlice";
@@ -15,7 +15,7 @@ function SignIn() {
   axios.defaults.withCredentials = true;
 
   const Login = async (Email: string, Password: string) => {
-    const user = await axios.post("http://localhost:3000/Users/Login", {
+    const user = await axios.post("/Users/Login", {
       email: Email,
       password: Password,
     });
