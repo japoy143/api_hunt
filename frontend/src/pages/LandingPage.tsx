@@ -23,7 +23,7 @@ function LandingPage() {
             onClick={() => navigate("/SignUp")}
             className="mt-4 h-10 w-40 rounded-md bg-black"
           >
-            <p className="text-white">SignUp Now</p>
+            <p className="text-white">Sign Up Now</p>
           </button>
         </section>
         <section className="row-span-2 flex flex-row items-center justify-center">

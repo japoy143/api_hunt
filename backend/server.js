@@ -41,10 +41,13 @@ app.use((req, res, next) => {
 //TODO:change the route name
 const APIRoute = require("./routes/APIListRoute");
 const UserRoute = require("./routes/userRoute");
+const EmailRoute = require("./routes/emailRoutes");
 
 app.use("/APIs", APIRoute);
 
 app.use("/Users", UserRoute);
+
+app.use("/sendMail", EmailRoute);
 
 // use the client by path
 app.use(express.static(path.join(__dirname, "../frontend/dist")));
