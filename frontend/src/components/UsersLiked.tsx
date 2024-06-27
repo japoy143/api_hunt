@@ -41,7 +41,15 @@ function UsersLiked({ Id }: UsersLikedProps) {
             key={index}
             className="flex h-10 w-20 flex-row items-center space-x-2 font-poppins"
           >
-            <img src={Img[like.avatar].img} className="h-8" alt="" />{" "}
+            <img
+              src={
+                like.avatar === null
+                  ? "/icons/avatar.svg"
+                  : Img[like.avatar].img
+              }
+              className="h-8"
+              alt=""
+            />
             <p className="text-center text-sm">{formatUserName(like.email)}</p>
           </div>
         ))
