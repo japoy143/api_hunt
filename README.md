@@ -2,6 +2,8 @@
 ![API Hunt](LandingPage.png)
 API Hunt is a web app that you can browse free api's for your next projects. using MERN stack
 
+Figma Link
+https://www.figma.com/design/1qYOtHOsJKhglQHQcUvHf0/Untitled?node-id=48-1324&t=NvH1ppdIkrWTAF6s-1
 
 ## How to Install and Set up
 
@@ -62,8 +64,6 @@ link2: https://www.youtube.com/watch?v=0Pt7Kfh78Jg&t=564s
 **Server:** Node, Express, MongoDB
 
 
-#Figma Link
-https://www.figma.com/design/1qYOtHOsJKhglQHQcUvHf0/Untitled?node-id=48-1324&t=NvH1ppdIkrWTAF6s-1
 
 ## Authors
 
