@@ -1,5 +1,5 @@
 # readme.md
-
+![API Hunt](LandingPage.png)
 API Hunt is a web app that you can browse free api's for your next projects. using MERN stack
 
 
