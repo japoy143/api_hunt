@@ -21,7 +21,7 @@ cd backend
 npm i 
 ```
 
-## how set up localhost and mongo db
+## How set up localhost and mongo db
 ```bash
 cd api_hunt
 cd backend
@@ -62,7 +62,19 @@ mongoose
   });
 ```
 
-##how to run
+## API Routes
+```bash
+POST
+http://localhost:3000/APIs/
+http://localhost:3000/Users/SignUp
+GET
+http://localhost:3000/Users/
+http://localhost:3000/APIs/
+http://localhost:3000/Users/Logout
+http://localhost:3000/Users/Refresh
+```
+
+## How to run
 ```bash
   cd backend
   npm start
