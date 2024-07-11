@@ -1,5 +1,7 @@
 import axios from "axios";
-const BASE_URL = "https://api-hunt.onrender.com";
+const BASE_URL = "";
+
+const DeployedURL = "https://api-hunt.onrender.com";
 
 export default axios.create({
   baseURL: BASE_URL,
