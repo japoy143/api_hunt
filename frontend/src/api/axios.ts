@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_URL = "";
+const BASE_URL = "http://localhost:3000";
 
 const DeployedURL = "https://api-hunt.onrender.com";
 
