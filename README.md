@@ -21,7 +21,7 @@ cd backend
 npm i 
 ```
 
-##how set up localhost and mongo db
+## how set up localhost and mongo db
 ```bash
 cd api_hunt
 cd backend
@@ -35,9 +35,9 @@ inside the .env file
   MONGO_URI=<ur mongo db connection string>
 ```
 
-##Insert Data 
+## Insert Data 
 open the use the data.json list to insert first using
-`
+```bash
 const api = require('../models/APIListModel');
 const data = [];
 
@@ -60,8 +60,7 @@ mongoose
     console.log('DB connection failed'.red);
     console.error(err); // Log the error for debugging
   });
-
-`
+```
 
 ##how to run
 ```bash
