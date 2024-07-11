@@ -43,7 +43,7 @@ const data = [];
 
 const initializeData = async (req, res) => {
   try {
-    const result = await api.insertMany(data); // Changed 'res' to 'result' to avoid redeclaration
+    const result = await api.insertMany(data); 
     return res.json({ message: 'Data Inserted Successfully', result });
   } catch (err) {
     return res.status(500).json({ error: err.message });
